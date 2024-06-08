@@ -1,0 +1,49 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #8ae6ff;
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    width: 90%;
+}
+
+.left-panel, .right-panel {
+    flex: 1;
+    padding: 20px;
+}
+
+.left-panel {
+    text-align: center;
+    position: relative;
+}
+
+.cloud {
+    margin: 20px 0;
+    position: absolute;
+    top: 80%;
+    left: 30%;
+}
+
+.cloud img {
+    width: 350px;
+    cursor: pointer;
+}
+
+button.upgrade-button {
+    display: block;
+    margin: 20px 0;
+    padding: 15px 30px;
+    font-size: 18px;
+    cursor: pointer;
+    width: 300px;
+    text-align: center;
+}
