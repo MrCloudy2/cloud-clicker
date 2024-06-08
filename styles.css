@@ -27,15 +27,15 @@ body {
 }
 
 .cloud {
-    margin: 20px 0;
-    position: absolute;
-    top: 80%;
-    left: 30%;
+    margin-top: 20px;
+    position: relative;
+    text-align: center;
 }
 
 .cloud img {
     width: 350px;
     cursor: pointer;
+    margin: 0 auto; /* Center the image horizontally */
 }
 
 button.upgrade-button {

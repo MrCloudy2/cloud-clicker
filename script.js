@@ -1,27 +1,36 @@
-let cloudCount = 0;
-let cursors = 0;
-let cursorCost = 10;
-let factories = 0;
-let factoryCost = 100;
-let cloudGenerators = 0;
-let cloudGeneratorCost = 500;
-let weatherMachines = 0;
-let weatherMachineCost = 2000;
-let stormStations = 0;
-let stormStationCost = 10000;
-let atmosphereManipulators = 0;
-let atmosphereManipulatorCost = 50000;
-let climateControllers = 0;
-let climateControllerCost = 200000;
+// Initialize the game state from local storage or set default values
+let gameState = JSON.parse(localStorage.getItem('gameState')) || {
+    cloudCount: 0,
+    cursors: 0,
+    cursorCost: 10,
+    factories: 0,
+    factoryCost: 100,
+    cloudGenerators: 0,
+    cloudGeneratorCost: 500,
+    weatherMachines: 0,
+    weatherMachineCost: 2000,
+    stormStations: 0,
+    stormStationCost: 10000,
+    atmosphereManipulators: 0,
+    atmosphereManipulatorCost: 50000,
+    climateControllers: 0,
+    climateControllerCost: 200000
+};
 
+// Function to save game state to local storage
+function saveGameState() {
+    localStorage.setItem('gameState', JSON.stringify(gameState));
+}
+
+// Update CPS function
 function updateCPS() {
-    const cursorCPS = cursors;
-    const factoryCPS = factories * 5;
-    const cloudGeneratorCPS = cloudGenerators * 20;
-    const weatherMachineCPS = weatherMachines * 50;
-    const stormStationCPS = stormStations * 100;
-    const atmosphereManipulatorCPS = atmosphereManipulators * 200;
-    const climateControllerCPS = climateControllers * 500;
+    const cursorCPS = gameState.cursors;
+    const factoryCPS = gameState.factories * 5;
+    const cloudGeneratorCPS = gameState.cloudGenerators * 20;
+    const weatherMachineCPS = gameState.weatherMachines * 50;
+    const stormStationCPS = gameState.stormStations * 100;
+    const atmosphereManipulatorCPS = gameState.atmosphereManipulators * 200;
+    const climateControllerCPS = gameState.climateControllers * 500;
 
     const totalCPS = cursorCPS + factoryCPS + cloudGeneratorCPS + weatherMachineCPS + stormStationCPS + atmosphereManipulatorCPS + climateControllerCPS;
 
@@ -35,102 +44,150 @@ function updateCPS() {
     document.getElementById('climateControllerCPS').innerText = climateControllerCPS;
 }
 
+// Update game state
+function updateGameState() {
+    gameState.cloudCount += gameState.cursors/10;
+    gameState.cloudCount += (gameState.factories * 5)/10; // Factories produce 5 clouds per second
+    gameState.cloudCount += (gameState.cloudGenerators * 20)/10; // Cloud Generators produce 20 clouds per second
+    gameState.cloudCount += (gameState.weatherMachines * 50)/10; // Weather Machines produce 50 clouds per second
+    gameState.cloudCount +=( gameState.stormStations * 100)/10; // Storm Stations produce 100 clouds per second
+    gameState.cloudCount += (gameState.atmosphereManipulators * 200)/10; // Atmosphere Manipulators produce 200 clouds per second
+    gameState.cloudCount += (gameState.climateControllers * 500)/10; // Climate Controllers produce 500 clouds per second
+
+    saveGameState(); // Save the updated game state
+    updateCPS(); // Update CPS display
+}
+
+// Update cloud count displayed on UI
+function updateCloudCountDisplay() {
+    const roundedCloudCount = Math.round(gameState.cloudCount * 10) / 10; // Round the cloud count to one decimal place
+    document.getElementById('cloudCount').innerText = roundedCloudCount.toFixed(1); // Update cloud count with one decimal place
+}
+
+// Load initial game state
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('cloudCount').innerText = gameState.cloudCount;
+    document.getElementById('cursorCount').innerText = gameState.cursors;
+    document.getElementById('cursorCost').innerText = gameState.cursorCost;
+    document.getElementById('factoryCount').innerText = gameState.factories;
+    document.getElementById('factoryCost').innerText = gameState.factoryCost;
+    document.getElementById('cloudGeneratorCount').innerText = gameState.cloudGenerators;
+    document.getElementById('cloudGeneratorCost').innerText = gameState.cloudGeneratorCost;
+    document.getElementById('weatherMachineCount').innerText = gameState.weatherMachines;
+    document.getElementById('weatherMachineCost').innerText = gameState.weatherMachineCost;
+    document.getElementById('stormStationCount').innerText = gameState.stormStations;
+    document.getElementById('stormStationCost').innerText = gameState.stormStationCost;
+    document.getElementById('atmosphereManipulatorCount').innerText = gameState.atmosphereManipulators;
+    document.getElementById('atmosphereManipulatorCost').innerText = gameState.atmosphereManipulatorCost;
+    document.getElementById('climateControllerCount').innerText = gameState.climateControllers;
+    document.getElementById('climateControllerCost').innerText = gameState.climateControllerCost;
+    updateCPS(); // Update CPS display
+});
+
+// Cloud clicking function
 function clickCloud() {
-    cloudCount++;
-    document.getElementById('cloudCount').innerText = cloudCount;
+    gameState.cloudCount++;
 }
 
+// Buy cursor function
 function buyCursor() {
-    if (cloudCount >= cursorCost) {
-        cloudCount -= cursorCost;
-        cursors++;
-        cursorCost = Math.round(cursorCost * 1.15);
-        document.getElementById('cloudCount').innerText = cloudCount;
-        document.getElementById('cursorCount').innerText = cursors;
-        document.getElementById('cursorCost').innerText = cursorCost;
-        updateCPS();
+    if (gameState.cloudCount >= gameState.cursorCost) {
+        gameState.cloudCount -= gameState.cursorCost;
+        gameState.cursors++;
+        gameState.cursorCost = Math.round(gameState.cursorCost * 1.15);
+        saveGameState(); // Save the updated game state
+        document.getElementById('cursorCount').innerText = gameState.cursors; // Update cursor count
+        document.getElementById('cursorCost').innerText = gameState.cursorCost; // Update cursor cost
+        updateCPS(); // Update CPS display
     }
 }
 
+// Buy factory function
 function buyFactory() {
-    if (cloudCount >= factoryCost) {
-        cloudCount -= factoryCost;
-        factories++;
-        factoryCost = Math.round(factoryCost * 1.15);
-        document.getElementById('cloudCount').innerText = cloudCount;
-        document.getElementById('factoryCount').innerText = factories;
-        document.getElementById('factoryCost').innerText = factoryCost;
-        updateCPS();
+    if (gameState.cloudCount >= gameState.factoryCost) {
+        gameState.cloudCount -= gameState.factoryCost;
+        gameState.factories++;
+        gameState.factoryCost = Math.round(gameState.factoryCost * 1.15);
+        saveGameState(); // Save the updated game state
+        document.getElementById('factoryCount').innerText = gameState.factories; // Update factory count
+        document.getElementById('factoryCost').innerText = gameState.factoryCost; // Update factory cost
+        updateCPS(); // Update CPS display
     }
 }
 
+// Buy cloud generator function
 function buyCloudGenerator() {
-    if (cloudCount >= cloudGeneratorCost) {
-        cloudCount -= cloudGeneratorCost;
-        cloudGenerators++;
-        cloudGeneratorCost = Math.round(cloudGeneratorCost * 1.15);
-        document.getElementById('cloudCount').innerText = cloudCount;
-        document.getElementById('cloudGeneratorCount').innerText = cloudGenerators;
-        document.getElementById('cloudGeneratorCost').innerText = cloudGeneratorCost;
-        updateCPS();
+    if (gameState.cloudCount >= gameState.cloudGeneratorCost) {
+        gameState.cloudCount -= gameState.cloudGeneratorCost;
+        gameState.cloudGenerators++;
+        gameState.cloudGeneratorCost = Math.round(gameState.cloudGeneratorCost * 1.15);
+        saveGameState(); // Save the updated game state
+        document.getElementById('cloudGeneratorCount').innerText = gameState.cloudGenerators; // Update cloud generator count
+        document.getElementById('cloudGeneratorCost').innerText = gameState.cloudGeneratorCost; // Update cloud generator cost
+        updateCPS(); // Update CPS display
     }
 }
 
+// Buy weather machine function
 function buyWeatherMachine() {
-    if (cloudCount >= weatherMachineCost) {
-        cloudCount -= weatherMachineCost;
-        weatherMachines++;
-        weatherMachineCost = Math.round(weatherMachineCost * 1.15);
-        document.getElementById('cloudCount').innerText = cloudCount;
-        document.getElementById('weatherMachineCount').innerText = weatherMachines;
-        document.getElementById('weatherMachineCost').innerText = weatherMachineCost;
-        updateCPS();
+    if (gameState.cloudCount >= gameState.weatherMachineCost) {
+        gameState.cloudCount -= gameState.weatherMachineCost;
+        gameState.weatherMachines++;
+        gameState.weatherMachineCost = Math.round(gameState.weatherMachineCost * 1.15);
+        saveGameState(); // Save the updated game state
+        document.getElementById('weatherMachineCount').innerText = gameState.weatherMachines; // Update weather machine count
+        document.getElementById('weatherMachineCost').innerText = gameState.weatherMachineCost; // Update weather machine cost
+        updateCPS(); // Update CPS display
     }
 }
 
+// Buy storm station function
 function buyStormStation() {
-    if (cloudCount >= stormStationCost) {
-        cloudCount -= stormStationCost;
-        stormStations++;
-        stormStationCost = Math.round(stormStationCost * 1.15);
-        document.getElementById('cloudCount').innerText = cloudCount;
-        document.getElementById('stormStationCount').innerText = stormStations;
-        document.getElementById('stormStationCost').innerText = stormStationCost;
-        updateCPS();
+    if (gameState.cloudCount >= gameState.stormStationCost) {
+        gameState.cloudCount -= gameState.stormStationCost;
+        gameState.stormStations++;
+        gameState.stormStationCost = Math.round(gameState.stormStationCost * 1.15);
+        saveGameState(); // Save the updated game state
+        document.getElementById('stormStationCount').innerText = gameState.stormStations; // Update storm station count
+        document.getElementById('stormStationCost').innerText = gameState.stormStationCost; // Update storm station cost
+        updateCPS(); // Update CPS display
     }
 }
 
+// Buy atmosphere manipulator function
 function buyAtmosphereManipulator() {
-    if (cloudCount >= atmosphereManipulatorCost) {
-        cloudCount -= atmosphereManipulatorCost;
-        atmosphereManipulators++;
-        atmosphereManipulatorCost = Math.round(atmosphereManipulatorCost * 1.15);
-        document.getElementById('cloudCount').innerText = cloudCount;
-        document.getElementById('atmosphereManipulatorCount').innerText = atmosphereManipulators;
-        document.getElementById('atmosphereManipulatorCost').innerText = atmosphereManipulatorCost;
-        updateCPS();
+    if (gameState.cloudCount >= gameState.atmosphereManipulatorCost) {
+        gameState.cloudCount -= gameState.atmosphereManipulatorCost;
+        gameState.atmosphereManipulators++;
+        gameState.atmosphereManipulatorCost = Math.round(gameState.atmosphereManipulatorCost * 1.15);
+        saveGameState(); // Save the updated game state
+        document.getElementById('atmosphereManipulatorCount').innerText = gameState.atmosphereManipulators; // Update atmosphere manipulator count
+        document.getElementById('atmosphereManipulatorCost').innerText = gameState.atmosphereManipulatorCost; // Update atmosphere manipulator cost
+        updateCPS(); // Update CPS display
     }
 }
 
+// Buy climate controller function
 function buyClimateController() {
-    if (cloudCount >= climateControllerCost) {
-        cloudCount -= climateControllerCost;
-        climateControllers++;
-        climateControllerCost = Math.round(climateControllerCost * 1.15);
-        document.getElementById('cloudCount').innerText = cloudCount;
-        document.getElementById('climateControllerCount').innerText = climateControllers;
-        document.getElementById('climateControllerCost').innerText = climateControllerCost;
-        updateCPS();
+    if (gameState.cloudCount >= gameState.climateControllerCost) {
+        gameState.cloudCount -= gameState.climateControllerCost;
+        gameState.climateControllers++;
+        gameState.climateControllerCost = Math.round(gameState.climateControllerCost * 1.15);
+        saveGameState(); // Save the updated game state
+        document.getElementById('climateControllerCount').innerText = gameState.climateControllers; // Update climate controller count
+        document.getElementById('climateControllerCost').innerText = gameState.climateControllerCost; // Update climate controller cost
+        updateCPS(); // Update CPS display
     }
 }
 
+// Update game state and UI every second
 setInterval(function() {
-    cloudCount += cursors;
-    cloudCount += factories * 5; // Factories produce 5 clouds per second
-    cloudCount += cloudGenerators * 20; // Cloud Generators produce 20 clouds per second
-    cloudCount += weatherMachines * 50; // Weather Machines produce 50 clouds per second
-    cloudCount += stormStations * 100; // Storm Stations produce 100 clouds per second
-    cloudCount += atmosphereManipulators * 200; // Atmosphere Manipulators produce 200 clouds per second
-    cloudCount += climateControllers * 500; // Climate Controllers produce 500 clouds per second
-    document.getElementById('cloudCount').innerText = cloudCount;
-}, 1000);
+    updateGameState(); // Update game state
+    updateCloudCountDisplay(); // Update cloud count displayed on UI
+}, 100);
+
+// Function to reset the saved game state
+function resetGame() {
+    localStorage.removeItem('gameState'); // Remove the saved game state from local storage
+    location.reload(); // Reload the page to reset the game
+}
