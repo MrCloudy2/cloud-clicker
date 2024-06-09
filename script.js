@@ -30,6 +30,11 @@ function saveGameState() {
     localStorage.setItem('gameState', JSON.stringify(gameState));
 }
 
+//cheats for development
+function setClouds(amount){
+    gameState.cloudCount = amount;
+}
+
 // Update CPS function
 function updateCPS() {
     const cursorCPS = gameState.cursors;
