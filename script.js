@@ -2,20 +2,28 @@
 let gameState = JSON.parse(localStorage.getItem('gameState')) || {
     cloudCount: 0,
     cursors: 0,
-    cursorCost: 100,
     factories: 0,
-    factoryCost: 1000,
     cloudGenerators: 0,
-    cloudGeneratorCost: 5000,
     weatherMachines: 0,
-    weatherMachineCost: 20000,
     stormStations: 0,
-    stormStationCost: 100000,
     atmosphereManipulators: 0,
-    atmosphereManipulatorCost: 500000,
-    climateControllers: 0,
-    climateControllerCost: 2000000
+    climateControllers: 0
 };
+
+// Function to calculate building costs based on quantity owned
+function calculateCost(quantity, baseCost) {
+    return Math.floor(baseCost * Math.pow(1.15, quantity));
+}
+
+// Set initial costs based on default values
+gameState.cursorCost = calculateCost(gameState.cursors, 100);
+gameState.factoryCost = calculateCost(gameState.factories, 1000);
+gameState.cloudGeneratorCost = calculateCost(gameState.cloudGenerators, 5000);
+gameState.weatherMachineCost = calculateCost(gameState.weatherMachines, 20000);
+gameState.stormStationCost = calculateCost(gameState.stormStations, 100000);
+gameState.atmosphereManipulatorCost = calculateCost(gameState.atmosphereManipulators, 500000);
+gameState.climateControllerCost = calculateCost(gameState.climateControllers, 2000000);
+
 
 // Function to save game state to local storage
 function saveGameState() {
