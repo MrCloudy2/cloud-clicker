@@ -2,19 +2,19 @@
 let gameState = JSON.parse(localStorage.getItem('gameState')) || {
     cloudCount: 0,
     cursors: 0,
-    cursorCost: 10,
+    cursorCost: 100,
     factories: 0,
-    factoryCost: 100,
+    factoryCost: 1000,
     cloudGenerators: 0,
-    cloudGeneratorCost: 500,
+    cloudGeneratorCost: 5000,
     weatherMachines: 0,
-    weatherMachineCost: 2000,
+    weatherMachineCost: 20000,
     stormStations: 0,
-    stormStationCost: 10000,
+    stormStationCost: 100000,
     atmosphereManipulators: 0,
-    atmosphereManipulatorCost: 50000,
+    atmosphereManipulatorCost: 500000,
     climateControllers: 0,
-    climateControllerCost: 200000
+    climateControllerCost: 2000000
 };
 
 // Function to save game state to local storage
