@@ -61,7 +61,7 @@ function updateGameState() {
 // Update cloud count displayed on UI
 function updateCloudCountDisplay() {
     const roundedCloudCount = Math.round(gameState.cloudCount * 10) / 10; // Round the cloud count to one decimal place
-    document.getElementById('cloudCount').innerText = roundedCloudCount.toFixed(1); // Update cloud count with one decimal place
+    document.getElementById('cloudCount').innerText = roundedCloudCount.toFixed(0); // Update cloud count with one decimal place
 }
 
 // Load initial game state
@@ -191,3 +191,37 @@ function resetGame() {
     localStorage.removeItem('gameState'); // Remove the saved game state from local storage
     location.reload(); // Reload the page to reset the game
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll('.upgrade-button .info').forEach(info => {
+        info.style.display = 'none'; // Hide info spans by default
+    });
+    
+    document.querySelectorAll('.upgrade-button').forEach(button => {
+        button.addEventListener('mouseenter', function() {
+            const info = this.querySelector('.info');
+            const rect = this.getBoundingClientRect();
+            const containerRect = document.querySelector('.container').getBoundingClientRect();
+    
+            // Check if there's enough space on the right side
+            if (rect.right + info.offsetWidth > containerRect.right - 50) {
+                info.style.left = 'auto';
+                info.style.right = '100%';
+            } else {
+                info.style.left = '100%';
+                info.style.right = 'auto';
+            }
+    
+            // Display the tooltip
+            info.style.display = 'flex';
+        });
+    
+        button.addEventListener('mouseleave', function() {
+            // Hide the tooltip when the mouse leaves the button
+            this.querySelector('.info').style.display = 'none';
+        });
+    });
+});
+
+
+

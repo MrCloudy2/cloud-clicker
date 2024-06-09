@@ -32,7 +32,7 @@ body {
 }
 
 .cloud {
-    margin: 10px 0; /* Adds vertical margin above and below the cloud container */
+    margin: 20px 0; /* Adds vertical margin above and below the cloud container */
     text-align: center; /* Centers the content inside the cloud container */
 }
 
@@ -43,10 +43,37 @@ body {
 
 button.upgrade-button {
     display: block; /* Makes the button a block-level element */
-    margin: 10px 0; /* Adds vertical margin above and below the button */
+    margin: 20px 0; /* Adds vertical margin above and below the button */
     padding: 15px 30px; /* Adds padding inside the button */
     font-size: 18px; /* Sets the font size of the button text */
     cursor: pointer; /* Changes the cursor to a pointer when hovering over the button */
-    width: 400px; /* Sets the width of the button */
-    text-align: start; /* Centers the text inside the button */
+    width: 300px; /* Sets the width of the button */
+    text-align: center; /* Centers the text inside the button */
+    position: relative; /* Enables positioning of child elements */
+}
+
+button.upgrade-button .cost {
+    display: block; /* Makes the cost span a block-level element */
+    margin-top: 10px; /* Adds top margin to the cost span */
+}
+
+button.upgrade-button .info {
+    display: none; /* Hides the info span by default */
+    position: absolute; /* Positions the info span relative to the button */
+    top: 0; /* Aligns the top of the info span with the top of the button */
+    left: 100%; /* Positions the info span to the right of the button */
+    background-color: #fff; /* Sets the background color of the info span */
+    color: #000; /* Sets the text color of the info span */
+    padding: 10px; /* Adds padding inside the info span */
+    border: 1px solid #000; /* Adds a border to the info span */
+    z-index: 1; /* Ensures the info span appears above other elements */
+    width: max-content; /* Ensures the info span takes up only as much width as needed */
+    white-space: nowrap; /* Prevents the info span text from wrapping */
+    display: flex; /* Makes the info span a flex container */
+    flex-direction: column; /* Arranges the children of the info span in a column */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds a shadow to the tooltip for better visibility */
+}
+
+button.upgrade-button:hover .info {
+    display: flex; /* Displays the info span as a flex container when the button is hovered */
 }
