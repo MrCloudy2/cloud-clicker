@@ -41,6 +41,11 @@ body {
     cursor: pointer; /* Changes the cursor to a pointer when hovering over the cloud image */
 }
 
+.cloud img:hover {
+    transform: scale(1.1); /* Increase the size of the cloud image by 10% on hover */
+}
+
+
 button.upgrade-button {
     display: block; /* Makes the button a block-level element */
     margin: 20px 0; /* Adds vertical margin above and below the button */
