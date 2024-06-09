@@ -1,49 +1,52 @@
 body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #8ae6ff;
-    margin: 0;
+    font-family: Arial, sans-serif; /* Sets the font family for the entire page */
+    display: flex; /* Enables flexbox layout on the body */
+    justify-content: center; /* Centers the container horizontally */
+    align-items: center; /* Centers the container vertically */
+    height: 100vh; /* Sets the height of the body to 100% of the viewport height */
+    background-color: #8ae6ff; /* Sets the background color of the body */
+    margin: 0; /* Removes the default margin of the body */
+    overflow: hidden; /* Prevents content from overflowing the viewport */
 }
 
 .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 20px;
-    width: 90%;
+    display: flex; /* Enables flexbox layout on the container */
+    justify-content: space-between; /* Distributes space between left and right panels */
+    align-items: flex-start; /* Aligns items to the start of the cross axis (top) */
+    padding: 20px; /* Adds padding inside the container */
+    width: 90%; /* Sets the width of the container to 90% of the viewport width */
+    max-height: 100%; /* Ensures the container doesn't exceed 100% of the viewport height */
+    box-sizing: border-box; /* Includes padding and border in the element's total width and height */
 }
 
 .left-panel, .right-panel {
-    flex: 1;
-    padding: 20px;
+    flex: 1; /* Allows both panels to grow and fill the available space equally */
+    padding: 20px; /* Adds padding inside the panels */
 }
 
 .left-panel {
-    text-align: center;
-    position: relative;
+    text-align: center; /* Centers the text inside the left panel */
+    display: flex; /* Enables flexbox layout on the left panel */
+    flex-direction: column; /* Arranges children elements in a column */
+    align-items: center; /* Centers children elements horizontally */
 }
 
 .cloud {
-    margin-top: 20px;
-    position: relative;
-    text-align: center;
+    margin: 10px 0; /* Adds vertical margin above and below the cloud container */
+    text-align: center; /* Centers the content inside the cloud container */
 }
 
 .cloud img {
-    width: 350px;
-    cursor: pointer;
-    margin: 0 auto; /* Center the image horizontally */
+    width: 350px; /* Sets the width of the cloud image */
+    cursor: pointer; /* Changes the cursor to a pointer when hovering over the cloud image */
 }
 
 button.upgrade-button {
-    display: block;
-    margin: 20px 0;
-    padding: 15px 30px;
-    font-size: 18px;
-    cursor: pointer;
-    width: 300px;
-    text-align: center;
+    display: block; /* Makes the button a block-level element */
+    margin: 10px 0; /* Adds vertical margin above and below the button */
+    padding: 15px 30px; /* Adds padding inside the button */
+    font-size: 18px; /* Sets the font size of the button text */
+    cursor: pointer; /* Changes the cursor to a pointer when hovering over the button */
+    width: 400px; /* Sets the width of the button */
+    text-align: start; /* Centers the text inside the button */
 }
