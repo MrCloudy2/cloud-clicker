@@ -52,7 +52,7 @@ button.upgrade-button {
     padding: 10px 20px; /* Adds padding inside the button */
     font-size: 18px; /* Sets the font size of the button text */
     cursor: pointer; /* Changes the cursor to a pointer when hovering over the button */
-    width: 300px; /* Sets the width of the button */
+    width: 230px; /* Sets the width of the button */
     text-align: center; /* Centers the text inside the button */
     position: relative; /* Enables positioning of child elements */
 }
@@ -95,4 +95,5 @@ button.upgrade-button:hover .info {
     padding: 20px; /* Adds padding inside the right panel */
     max-height: 95vh; /* Sets maximum height of the right panel */
     overflow-y: auto; /* Adds vertical scrollbar if content overflows */
+    min-width: 30%;
 }
