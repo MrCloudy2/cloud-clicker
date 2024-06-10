@@ -45,8 +45,13 @@ body {
 }
 
 .cloud img {
-    width: 350px; /* Sets the width of the cloud image */
-    cursor: pointer; /* Changes the cursor to a pointer when hovering over the cloud image */
+    width: 350px;
+    cursor: pointer;
+    transition: transform 0.1s; /* Smooth transition for the scaling effect */
+}
+
+.cloud img:hover {
+    transform: scale(1.1); /* Enlarge the cloud image by 1.1 times on hover */
 }
 
 button.upgrade-button {
