@@ -93,9 +93,26 @@ button.upgrade-button:hover .info {
 .right-panel {
     display: flex; /* Enables flexbox layout on the right panel */
     flex-direction: column; /* Arranges children elements in a column */
-    align-items: center; /* Aligns children elements to the end of the cross axis (right) */
+    align-items: flex-start; /* Aligns children elements to the end of the cross axis (right) */
     padding: 20px; /* Adds padding inside the right panel */
     max-height: 95vh; /* Sets maximum height of the right panel */
 
     min-width: 50%;
+}
+
+/* Adjust button size for smaller viewports */
+@media (max-width: 768px) {
+    button.upgrade-button {
+        padding: 5% 8%;
+        font-size: 3vw;
+        width: 50%;
+    }
+    button.middle{
+        width: 100%;
+    }
+}
+
+.middle-panel {
+    display: flex;
+    min-width: 20%;
 }
