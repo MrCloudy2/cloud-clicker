@@ -7,6 +7,10 @@ body {
     background-color: #8ae6ff; /* Sets the background color of the body */
     margin: 0; /* Removes the default margin of the body */
     overflow: hidden; /* Prevents content from overflowing the viewport */
+    background-image: url('backgound.png');
+    background-size: cover; /* Adjust this value to fit your needs */
+    background-repeat: no-repeat; /* Prevent the background from repeating */
+    background-position: center; /* Center the background image */
 }
 
 .container {
