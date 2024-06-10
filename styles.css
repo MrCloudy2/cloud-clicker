@@ -1,5 +1,5 @@
 body {
-    font-family: Arial, sans-serif; /* Sets the font family for the entire page */
+    font-family: Arial; /* Sets the font family for the entire page */
     display: flex; /* Enables flexbox layout on the body */
     justify-content: center; /* Centers the container horizontally */
     align-items: center; /* Centers the container vertically */
@@ -77,6 +77,11 @@ button.upgrade-button .info {
     display: flex; /* Makes the info span a flex container */
     flex-direction: column; /* Arranges the children of the info span in a column */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds a shadow to the tooltip for better visibility */
+    font-size: 16px; /* Sets the font size of the button text */
+}
+
+button.upgrade-button .info p {
+    margin: 5px 0; /* Added margin to separate each piece of information */
 }
 
 button.upgrade-button:hover .info {
