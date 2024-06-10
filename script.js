@@ -8,13 +8,15 @@ let gameState = JSON.parse(localStorage.getItem('gameState')) || {
     weatherMachines: 0,
     stormStations: 0,
     atmosphereManipulators: 0,
-    climateControllers: 0
+    climateControllers: 0,
+    currentAmountPerClick: 1
 };
 
 // Function to calculate building costs based on quantity owned
 function calculateCost(quantity, baseCost) {
     return Math.floor(baseCost * Math.pow(1.15, quantity));
 }
+
 
 checkAndCorrectValues();
 
@@ -27,6 +29,7 @@ gameState.weatherMachineCost = calculateCost(gameState.weatherMachines, 20000);
 gameState.stormStationCost = calculateCost(gameState.stormStations, 100000);
 gameState.atmosphereManipulatorCost = calculateCost(gameState.atmosphereManipulators, 500000);
 gameState.climateControllerCost = calculateCost(gameState.climateControllers, 2000000);
+gameState.clickUpgradeCost = calculateCUCost(gameState.currentAmountPerClick, 10);
 
 
 // Function to save game state to local storage
@@ -50,6 +53,7 @@ function checkAndCorrectValues() {
     if (isNaN(gameState.stormStations)) gameState.stormStations = 0;
     if (isNaN(gameState.atmosphereManipulators)) gameState.atmosphereManipulators = 0;
     if (isNaN(gameState.climateControllers)) gameState.climateControllers = 0;
+    if (isNaN(gameState.currentAmountPerClick)) gameState.currentAmountPerClick = 1;
 
     // Recalculate CPS
     updateCPS();
@@ -78,6 +82,8 @@ function updateCPS() {
     document.getElementById('stormStationCPS').innerText = stormStationCPS;
     document.getElementById('atmosphereManipulatorCPS').innerText = atmosphereManipulatorCPS;
     document.getElementById('climateControllerCPS').innerText = climateControllerCPS;
+    document.getElementById('currentAmountPerClick').innerText = gameState.currentAmountPerClick;
+    document.getElementById('clickUpgradeCost').innerText = gameState.clickUpgradeCost;
 }
 
 // Update game state
@@ -123,9 +129,22 @@ document.addEventListener('DOMContentLoaded', function() {
     updateCPS(); // Update CPS display
 });
 
+function buyClickUpgrade(){
+    if(gameState.cloudCount >= gameState.clickUpgradeCost){
+    gameState.currentAmountPerClick++;
+    gameState.cloudCount = gameState.cloudCount - gameState.clickUpgradeCost;
+    gameState.clickUpgradeCost = gameState.clickUpgradeCost * 10;
+    }
+
+}
+
+function calculateCUCost(quantity, baseCost){
+    return Math.floor(baseCost  * Math.pow(10, (quantity - 1)));
+}
+
 // Cloud clicking function
 function clickCloud() {
-    gameState.cloudCount++;
+    gameState.cloudCount = gameState.cloudCount + gameState.currentAmountPerClick;
 }
 
 // Buy cursor function

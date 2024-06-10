@@ -16,9 +16,14 @@
                 <img src="cloud.png" alt="Cloud">
             </div>
         </div>
+        <div class="middle-panel">
+            <button class="upgrade-button" onclick="buyClickUpgrade()">
+                Click Upgrade<br>Cost: <span id="clickUpgradeCost"></span><br><span id="currentAmountPerClick"></span> per Click
+            </button>
+        </div>
         <div class="right-panel">
             <button class="upgrade-button" onclick="buyCursor()">
-                Buy Cursor
+                Click Upgrade
                 <span class="cost">Cost: <span id="cursorCost">10</span></span>
                 <span class="info">
                     <p>Amount: <span id="cursorCount">0</span></p>
