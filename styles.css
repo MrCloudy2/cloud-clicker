@@ -115,7 +115,9 @@ button.upgrade-button:hover .info {
     }
 }
 
-.middle-panel {
+.middle-pannel {
     display: flex;
+    align-items: center;
     min-width: 20%;
+
 }
