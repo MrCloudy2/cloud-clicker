@@ -58,7 +58,7 @@ function checkAndCorrectValues() {
 
 // Update CPS function
 function updateCPS() {
-    const cursorCPS = gameState.cursors * 0.1;
+    const cursorCPS = Math.round(gameState.cursors * 0.1 * 10)/10;
     const evaporatorCPS = gameState.evaporators;
     const factoryCPS = gameState.factories * 5;
     const cloudGeneratorCPS = gameState.cloudGenerators * 20;
@@ -70,7 +70,7 @@ function updateCPS() {
     const totalCPS = Math.round( (cursorCPS + evaporatorCPS + factoryCPS + cloudGeneratorCPS + weatherMachineCPS + stormStationCPS + atmosphereManipulatorCPS + climateControllerCPS)*10)/10;
 
     document.getElementById('cloudsPerSecond').innerText = totalCPS.toFixed(1);
-    document.getElementById('cursorCPS').innerText = cursorCPS;
+    document.getElementById('cursorCPS').innerText = cursorCPS.toFixed(1);
     document.getElementById('evaporatorCPS').innerText = evaporatorCPS;
     document.getElementById('factoryCPS').innerText = factoryCPS;
     document.getElementById('cloudGeneratorCPS').innerText = cloudGeneratorCPS;
