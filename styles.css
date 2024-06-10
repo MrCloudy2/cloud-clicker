@@ -13,7 +13,7 @@ body {
     display: flex; /* Enables flexbox layout on the container */
     justify-content: space-between; /* Distributes space between left and right panels */
     align-items: flex-start; /* Aligns items to the start of the cross axis (top) */
-    padding: 50px; /* Adds padding inside the container */
+    padding: 20px; /* Adds padding inside the container */
     width: 90%; /* Sets the width of the container to 90% of the viewport width */
     max-height: 100%; /* Ensures the container doesn't exceed 100% of the viewport height */
     box-sizing: border-box; /* Includes padding and border in the element's total width and height */
@@ -23,14 +23,6 @@ body {
     flex: 1; /* Allows both panels to grow and fill the available space equally */
     padding: 20px; /* Adds padding inside the panels */
 }
-
-.right-panel {
-    display: flex; /* Enables flexbox layout on the right panel */
-    flex-direction: column; /* Arranges children elements in a column */
-    align-items: flex-end; /* Aligns children elements to the end of the cross axis (right) */
-    padding: 20px; /* Adds padding inside the right panel */
-}
-
 
 .left-panel {
     text-align: center; /* Centers the text inside the left panel */
@@ -45,9 +37,9 @@ body {
 }
 
 .cloud img {
-    width: 350px;
-    cursor: pointer;
-    transition: transform 0.1s; /* Smooth transition for the scaling effect */
+    width: 350px; /* Sets the width of the cloud image */
+    cursor: pointer; /* Changes the cursor to a pointer when hovering over the cloud image */
+    transition: transform 0.2s; /* Smooth transition for the scaling effect */
 }
 
 .cloud img:hover {
@@ -56,8 +48,8 @@ body {
 
 button.upgrade-button {
     display: block; /* Makes the button a block-level element */
-    margin: 10px 0; /* Adds vertical margin above and below the button */
-    padding: 15px 30px; /* Adds padding inside the button */
+    margin: 10px 0; /* Adjust the margin to reduce the space between buttons */
+    padding: 10px 20px; /* Adds padding inside the button */
     font-size: 18px; /* Sets the font size of the button text */
     cursor: pointer; /* Changes the cursor to a pointer when hovering over the button */
     width: 300px; /* Sets the width of the button */
@@ -73,11 +65,11 @@ button.upgrade-button .cost {
 button.upgrade-button .info {
     display: none; /* Hides the info span by default */
     position: absolute; /* Positions the info span relative to the button */
-    top: 0; /* Aligns the top of the info span with the top of the button */
+    top: -20px; /* Aligns the top of the info span with the top of the button */
     left: 100%; /* Positions the info span to the right of the button */
     background-color: #fff; /* Sets the background color of the info span */
     color: #000; /* Sets the text color of the info span */
-    padding: 10px; /* Adds padding inside the info span */
+    padding: 7px; /* Adds padding inside the info span */
     border: 1px solid #000; /* Adds a border to the info span */
     z-index: 1; /* Ensures the info span appears above other elements */
     width: max-content; /* Ensures the info span takes up only as much width as needed */
@@ -89,4 +81,13 @@ button.upgrade-button .info {
 
 button.upgrade-button:hover .info {
     display: flex; /* Displays the info span as a flex container when the button is hovered */
+}
+
+.right-panel {
+    display: flex; /* Enables flexbox layout on the right panel */
+    flex-direction: column; /* Arranges children elements in a column */
+    align-items: flex-end; /* Aligns children elements to the end of the cross axis (right) */
+    padding: 20px; /* Adds padding inside the right panel */
+    max-height: 95vh; /* Sets maximum height of the right panel */
+    overflow-y: auto; /* Adds vertical scrollbar if content overflows */
 }
