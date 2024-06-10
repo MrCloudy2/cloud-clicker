@@ -18,6 +18,7 @@ body {
     max-height: 100%; /* Ensures the container doesn't exceed 100% of the viewport height */
     box-sizing: border-box; /* Includes padding and border in the element's total width and height */
     overflow-y: auto; /* Adds vertical scrollbar if content overflows */
+    overflow-x: auto; /* Adds vertical scrollbar if content overflows */
 }
 
 .left-panel, .right-panel {
@@ -96,5 +97,5 @@ button.upgrade-button:hover .info {
     padding: 20px; /* Adds padding inside the right panel */
     max-height: 95vh; /* Sets maximum height of the right panel */
 
-    min-width: 5%;
+    min-width: 30%;
 }
