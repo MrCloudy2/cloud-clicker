@@ -18,7 +18,7 @@ body {
     max-height: 100%; /* Ensures the container doesn't exceed 100% of the viewport height */
     box-sizing: border-box; /* Includes padding and border in the element's total width and height */
     overflow-y: auto; /* Adds vertical scrollbar if content overflows */
-    overflow-x: auto; /* Adds vertical scrollbar if content overflows */
+    overflow-x: clip; /* Adds vertical scrollbar if content overflows */
 }
 
 .left-panel, .right-panel {
@@ -93,10 +93,10 @@ button.upgrade-button:hover .info {
 .right-panel {
     display: flex; /* Enables flexbox layout on the right panel */
     flex-direction: column; /* Arranges children elements in a column */
-    align-items: flex-start; /* Aligns children elements to the end of the cross axis (right) */
+    align-items: center; /* Aligns children elements to the end of the cross axis (right) */
     padding: 20px; /* Adds padding inside the right panel */
     max-height: 95vh; /* Sets maximum height of the right panel */
-
+    max-width: 500px;
     min-width: 50%;
 }
 
@@ -109,6 +109,9 @@ button.upgrade-button:hover .info {
     }
     button.middle{
         width: 100%;
+    }
+    .right-panel {
+        align-items: flex-start; /* Aligns children elements to the end of the cross axis (right) */
     }
 }
 
