@@ -2,6 +2,7 @@
 let gameState = JSON.parse(localStorage.getItem('gameState')) || {
     cloudCount: 0,
     cursors: 0,
+    evaporators: 0, // New evaporator state
     factories: 0,
     cloudGenerators: 0,
     weatherMachines: 0,
@@ -16,7 +17,8 @@ function calculateCost(quantity, baseCost) {
 }
 
 // Set initial costs based on default values
-gameState.cursorCost = calculateCost(gameState.cursors, 100);
+gameState.cursorCost = calculateCost(gameState.cursors, 10); // Updated cursor cost
+gameState.evaporatorCost = calculateCost(gameState.evaporators, 100); // New evaporator cost
 gameState.factoryCost = calculateCost(gameState.factories, 1000);
 gameState.cloudGeneratorCost = calculateCost(gameState.cloudGenerators, 5000);
 gameState.weatherMachineCost = calculateCost(gameState.weatherMachines, 20000);
@@ -37,7 +39,8 @@ function setClouds(amount){
 
 // Update CPS function
 function updateCPS() {
-    const cursorCPS = gameState.cursors;
+    const cursorCPS = gameState.cursors * 0.1;
+    const evaporatorCPS = gameState.evaporators;
     const factoryCPS = gameState.factories * 5;
     const cloudGeneratorCPS = gameState.cloudGenerators * 20;
     const weatherMachineCPS = gameState.weatherMachines * 50;
@@ -45,10 +48,11 @@ function updateCPS() {
     const atmosphereManipulatorCPS = gameState.atmosphereManipulators * 200;
     const climateControllerCPS = gameState.climateControllers * 500;
 
-    const totalCPS = cursorCPS + factoryCPS + cloudGeneratorCPS + weatherMachineCPS + stormStationCPS + atmosphereManipulatorCPS + climateControllerCPS;
+    const totalCPS = Math.round( (cursorCPS + evaporatorCPS + factoryCPS + cloudGeneratorCPS + weatherMachineCPS + stormStationCPS + atmosphereManipulatorCPS + climateControllerCPS)*10)/10;
 
-    document.getElementById('cloudsPerSecond').innerText = totalCPS;
+    document.getElementById('cloudsPerSecond').innerText = totalCPS.toFixed(1);
     document.getElementById('cursorCPS').innerText = cursorCPS;
+    document.getElementById('evaporatorCPS').innerText = evaporatorCPS;
     document.getElementById('factoryCPS').innerText = factoryCPS;
     document.getElementById('cloudGeneratorCPS').innerText = cloudGeneratorCPS;
     document.getElementById('weatherMachineCPS').innerText = weatherMachineCPS;
@@ -59,13 +63,14 @@ function updateCPS() {
 
 // Update game state
 function updateGameState() {
-    gameState.cloudCount += gameState.cursors/10;
+    gameState.cloudCount += (gameState.cursors * 0.1) /10;
+    gameState.cloudCount += gameState.evaporators /10;
     gameState.cloudCount += (gameState.factories * 5)/10; // Factories produce 5 clouds per second
-    gameState.cloudCount += (gameState.cloudGenerators * 20)/10; // Cloud Generators produce 20 clouds per second
-    gameState.cloudCount += (gameState.weatherMachines * 50)/10; // Weather Machines produce 50 clouds per second
-    gameState.cloudCount +=( gameState.stormStations * 100)/10; // Storm Stations produce 100 clouds per second
-    gameState.cloudCount += (gameState.atmosphereManipulators * 200)/10; // Atmosphere Manipulators produce 200 clouds per second
-    gameState.cloudCount += (gameState.climateControllers * 500)/10; // Climate Controllers produce 500 clouds per second
+    gameState.cloudCount += (gameState.cloudGenerators * 20) /10; // Cloud Generators produce 20 clouds per second
+    gameState.cloudCount += (gameState.weatherMachines * 50) /10; // Weather Machines produce 50 clouds per second
+    gameState.cloudCount +=( gameState.stormStations * 100) /10; // Storm Stations produce 100 clouds per second
+    gameState.cloudCount += (gameState.atmosphereManipulators * 200) /10; // Atmosphere Manipulators produce 200 clouds per second
+    gameState.cloudCount += (gameState.climateControllers * 500) /10; // Climate Controllers produce 500 clouds per second
 
     saveGameState(); // Save the updated game state
     updateCPS(); // Update CPS display
@@ -74,7 +79,7 @@ function updateGameState() {
 // Update cloud count displayed on UI
 function updateCloudCountDisplay() {
     const roundedCloudCount = Math.round(gameState.cloudCount * 10) / 10; // Round the cloud count to one decimal place
-    document.getElementById('cloudCount').innerText = roundedCloudCount.toFixed(0); // Update cloud count with one decimal place
+    document.getElementById('cloudCount').innerText = roundedCloudCount.toFixed(1); // Update cloud count with one decimal place
 }
 
 // Load initial game state
@@ -82,6 +87,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('cloudCount').innerText = gameState.cloudCount;
     document.getElementById('cursorCount').innerText = gameState.cursors;
     document.getElementById('cursorCost').innerText = gameState.cursorCost;
+    document.getElementById('evaporatorCount').innerText = gameState.evaporators;
+    document.getElementById('evaporatorCost').innerText = gameState.evaporatorCost;
     document.getElementById('factoryCount').innerText = gameState.factories;
     document.getElementById('factoryCost').innerText = gameState.factoryCost;
     document.getElementById('cloudGeneratorCount').innerText = gameState.cloudGenerators;
@@ -111,6 +118,18 @@ function buyCursor() {
         saveGameState(); // Save the updated game state
         document.getElementById('cursorCount').innerText = gameState.cursors; // Update cursor count
         document.getElementById('cursorCost').innerText = gameState.cursorCost; // Update cursor cost
+        updateCPS(); // Update CPS display
+    }
+}
+
+function buyEvaporator() {
+    if (gameState.cloudCount >= gameState.evaporatorCost) {
+        gameState.cloudCount -= gameState.evaporatorCost;
+        gameState.evaporators++;
+        gameState.evaporatorCost = Math.round(gameState.evaporatorCost * 1.15);
+        saveGameState(); // Save the updated game state
+        document.getElementById('evaporatorCount').innerText = gameState.evaporators; // Update cursor count
+        document.getElementById('evaporatorCost').innerText = gameState.evaporatorCost; // Update cursor cost
         updateCPS(); // Update CPS display
     }
 }
