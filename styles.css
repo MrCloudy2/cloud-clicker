@@ -14,11 +14,9 @@ body {
     justify-content: space-between; /* Distributes space between left and right panels */
     align-items: flex-start; /* Aligns items to the start of the cross axis (top) */
     padding: 20px; /* Adds padding inside the container */
-    width: 100%; /* Sets the width of the container to 90% of the viewport width */
+    width: 90%; /* Sets the width of the container to 90% of the viewport width */
     max-height: 100%; /* Ensures the container doesn't exceed 100% of the viewport height */
     box-sizing: border-box; /* Includes padding and border in the element's total width and height */
-    overflow-y: auto; /* Adds vertical scrollbar if content overflows */
-    overflow-x: clip; /* Adds vertical scrollbar if content overflows */
 }
 
 .left-panel, .right-panel {
@@ -54,7 +52,7 @@ button.upgrade-button {
     padding: 10px 20px; /* Adds padding inside the button */
     font-size: 18px; /* Sets the font size of the button text */
     cursor: pointer; /* Changes the cursor to a pointer when hovering over the button */
-    width: 230px; /* Sets the width of the button */
+    width: 300px; /* Sets the width of the button */
     text-align: center; /* Centers the text inside the button */
     position: relative; /* Enables positioning of child elements */
 }
@@ -93,31 +91,8 @@ button.upgrade-button:hover .info {
 .right-panel {
     display: flex; /* Enables flexbox layout on the right panel */
     flex-direction: column; /* Arranges children elements in a column */
-    align-items: center; /* Aligns children elements to the end of the cross axis (right) */
+    align-items: flex-end; /* Aligns children elements to the end of the cross axis (right) */
     padding: 20px; /* Adds padding inside the right panel */
     max-height: 95vh; /* Sets maximum height of the right panel */
-    max-width: 500px;
-    min-width: 50%;
-}
-
-/* Adjust button size for smaller viewports */
-@media (max-width: 768px) {
-    button.upgrade-button {
-        padding: 5% 8%;
-        font-size: 3vw;
-        width: 50%;
-    }
-    button.middle{
-        width: 100%;
-    }
-    .right-panel {
-        align-items: flex-start; /* Aligns children elements to the end of the cross axis (right) */
-    }
-}
-
-.middle-pannel {
-    display: flex;
-    align-items: center;
-    min-width: 20%;
-
+    overflow-y: auto; /* Adds vertical scrollbar if content overflows */
 }
