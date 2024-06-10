@@ -95,4 +95,5 @@ button.upgrade-button:hover .info {
     padding: 20px; /* Adds padding inside the right panel */
     max-height: 95vh; /* Sets maximum height of the right panel */
     overflow-y: auto; /* Adds vertical scrollbar if content overflows */
+    min-width: 40%;
 }
