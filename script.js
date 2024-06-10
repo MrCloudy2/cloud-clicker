@@ -16,6 +16,8 @@ function calculateCost(quantity, baseCost) {
     return Math.floor(baseCost * Math.pow(1.15, quantity));
 }
 
+checkAndCorrectValues();
+
 // Set initial costs based on default values
 gameState.cursorCost = calculateCost(gameState.cursors, 10); // Updated cursor cost
 gameState.evaporatorCost = calculateCost(gameState.evaporators, 100); // New evaporator cost
@@ -36,6 +38,23 @@ function saveGameState() {
 function setClouds(amount){
     gameState.cloudCount = amount;
 }
+
+// Function to check and correct NaN values
+function checkAndCorrectValues() {
+    if (isNaN(gameState.cloudCount)) gameState.cloudCount = 0;
+    if (isNaN(gameState.cursors)) gameState.cursors = 0;
+    if (isNaN(gameState.evaporators)) gameState.evaporators = 0;
+    if (isNaN(gameState.factories)) gameState.factories = 0;
+    if (isNaN(gameState.cloudGenerators)) gameState.cloudGenerators = 0;
+    if (isNaN(gameState.weatherMachines)) gameState.weatherMachines = 0;
+    if (isNaN(gameState.stormStations)) gameState.stormStations = 0;
+    if (isNaN(gameState.atmosphereManipulators)) gameState.atmosphereManipulators = 0;
+    if (isNaN(gameState.climateControllers)) gameState.climateControllers = 0;
+
+    // Recalculate CPS
+    updateCPS();
+}
+
 
 // Update CPS function
 function updateCPS() {
