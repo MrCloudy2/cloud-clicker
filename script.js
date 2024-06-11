@@ -42,6 +42,7 @@ function setClouds(amount){
     gameState.cloudCount = amount;
 }
 
+
 // Function to check and correct NaN values
 function checkAndCorrectValues() {
     if (isNaN(gameState.cloudCount)) gameState.cloudCount = 0;
