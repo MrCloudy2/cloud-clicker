@@ -1,31 +1,26 @@
 body {
     font-family: Arial; /* Sets the font family for the entire page */
     display: flex; /* Enables flexbox layout on the body */
-    justify-content: center; /* Centers the container horizontally */
+    justify-content: flex-start;
     align-items: center; /* Centers the container vertically */
     height: 100vh; /* Sets the height of the body to 100% of the viewport height */
-    background-color: #8ae6ff; /* Sets the background color of the body */
+    background-color: #1c2229; /* Sets the background color of the body */
     margin: 0; /* Removes the default margin of the body */
     overflow: hidden; /* Prevents content from overflowing the viewport */
-    background-image: url('backgound.png');
+
+}
+
+
+.left-panel, .right-panel, .middle-panel {
+    flex: 1; /* Allows both panels to grow and fill the available space equally */
+    padding: 20px; /* Adds padding inside the panels */
+}
+
+.middle-panel, .right-panel{
+    background-image: url('backgroundR.png');
     background-size: cover; /* Adjust this value to fit your needs */
     background-repeat: no-repeat; /* Prevent the background from repeating */
     background-position: center; /* Center the background image */
-}
-
-.container {
-    display: flex; /* Enables flexbox layout on the container */
-    justify-content: space-between; /* Distributes space between left and right panels */
-    align-items: flex-start; /* Aligns items to the start of the cross axis (top) */
-    padding: 20px; /* Adds padding inside the container */
-    width: 90%; /* Sets the width of the container to 90% of the viewport width */
-    max-height: 100%; /* Ensures the container doesn't exceed 100% of the viewport height */
-    box-sizing: border-box; /* Includes padding and border in the element's total width and height */
-}
-
-.left-panel, .right-panel {
-    flex: 1; /* Allows both panels to grow and fill the available space equally */
-    padding: 20px; /* Adds padding inside the panels */
 }
 
 .left-panel {
@@ -33,6 +28,13 @@ body {
     display: flex; /* Enables flexbox layout on the left panel */
     flex-direction: column; /* Arranges children elements in a column */
     align-items: center; /* Centers children elements horizontally */
+    height: 100vh;
+    max-width: 500px;
+    min-width: 300px;
+    background-image: url('backgound.png');
+    background-size: cover; /* Adjust this value to fit your needs */
+    background-repeat: no-repeat; /* Prevent the background from repeating */
+    background-position: center; /* Center the background image */
 }
 
 .cloud {
@@ -70,7 +72,7 @@ button.upgrade-button .info {
     display: none; /* Hides the info span by default */
     position: absolute; /* Positions the info span relative to the button */
     top: -20px; /* Aligns the top of the info span with the top of the button */
-    left: 100%; /* Positions the info span to the right of the button */
+    right: 80%; /* Positions the info span to the right of the button */
     background-color: #fff; /* Sets the background color of the info span */
     color: #000; /* Sets the text color of the info span */
     padding: 7px; /* Adds padding inside the info span */
@@ -78,7 +80,6 @@ button.upgrade-button .info {
     z-index: 1; /* Ensures the info span appears above other elements */
     width: max-content; /* Ensures the info span takes up only as much width as needed */
     white-space: nowrap; /* Prevents the info span text from wrapping */
-    display: flex; /* Makes the info span a flex container */
     flex-direction: column; /* Arranges the children of the info span in a column */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds a shadow to the tooltip for better visibility */
     font-size: 16px; /* Sets the font size of the button text */
@@ -91,13 +92,26 @@ button.upgrade-button .info p {
 button.upgrade-button:hover .info {
     display: flex; /* Displays the info span as a flex container when the button is hovered */
 }
+.middle-panel{
+    text-align: center; /* Centers the text inside the left panel */
+    display: flex; /* Enables flexbox layout on the left panel */
+    flex-direction: column; /* Arranges children elements in a column */
+    align-items: center; /* Centers children elements horizontally */
+    height: 100vh;
+}
 
 .right-panel {
     display: flex; /* Enables flexbox layout on the right panel */
     flex-direction: column; /* Arranges children elements in a column */
-    align-items: flex-end; /* Aligns children elements to the end of the cross axis (right) */
+    align-items: center; /* Aligns children elements to the end of the cross axis (right) */
     padding: 20px; /* Adds padding inside the right panel */
-    max-height: 95vh; /* Sets maximum height of the right panel */
+    height: 100vh; /* Sets maximum height of the right panel */
     overflow-y: auto; /* Adds vertical scrollbar if content overflows */
-    min-width: 40%;
+    max-width: 20%;
+    min-width: 20%;
+    overflow-y: auto; /* Adds vertical scrollbar if content overflows */
+}
+.divider1, .divider2{
+    height: 100vh;
+    width: 15px;
 }

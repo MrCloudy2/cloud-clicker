@@ -8,7 +8,6 @@
     <link rel="icon" href="cloudlogo.png">
 </head>
 <body>
-    <div class="container">
         <div class="left-panel">
             <h1>Cloud Clicker</h1>
             <h2>CPS: <span id="cloudsPerSecond">0</span></h2>
@@ -17,14 +16,20 @@
                 <img src="cloud.png" alt="Cloud">
             </div>
         </div>
+        <div class="divider1">
+        </div>
         <div class="middle-panel">
+        </div>
+        <div class="divider2">
+        </div>
+        <div class="right-panel">
+
             <button class="upgrade-button" onclick="buyClickUpgrade()">
                 Click Upgrade<br>Cost: <span id="clickUpgradeCost"></span><br><span id="currentAmountPerClick"></span> per Click
             </button>
-        </div>
-        <div class="right-panel">
+
             <button class="upgrade-button" onclick="buyCursor()">
-                Click Upgrade
+                Buy Cursor
                 <span class="cost">Cost: <span id="cursorCost">10</span></span>
                 <span class="info">
                     <p>Amount: <span id="cursorCount">0</span></p>
@@ -95,7 +100,6 @@
                     <p> CPS: 500 </p>
                     <p> Total CPS: <span id="climateControllerCPS">0</span></span></p>
             </button>
-        </div>
     </div>
     <script src="script.js"></script>
     <script src="tooltip.js"></script> <!-- Include the tooltip.js file -->

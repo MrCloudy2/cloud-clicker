@@ -62,27 +62,28 @@ function checkAndCorrectValues() {
 
 // Update CPS function
 function updateCPS() {
-    const cursorCPS = Math.round(gameState.cursors * 0.1 * 10)/10;
-    const evaporatorCPS = gameState.evaporators;
-    const factoryCPS = gameState.factories * 5;
-    const cloudGeneratorCPS = gameState.cloudGenerators * 20;
-    const weatherMachineCPS = gameState.weatherMachines * 50;
-    const stormStationCPS = gameState.stormStations * 100;
-    const atmosphereManipulatorCPS = gameState.atmosphereManipulators * 200;
-    const climateControllerCPS = gameState.climateControllers * 500;
+    cursorCPS = Math.round(gameState.cursors * 0.1 * 10)/10;
+    evaporatorCPS = gameState.evaporators;
+    factoryCPS = gameState.factories * 5;
+    cloudGeneratorCPS = gameState.cloudGenerators * 20;
+    weatherMachineCPS = gameState.weatherMachines * 50;
+    stormStationCPS = gameState.stormStations * 100;
+    atmosphereManipulatorCPS = gameState.atmosphereManipulators * 200;
+    climateControllerCPS = gameState.climateControllers * 500;
 
-    const totalCPS = Math.round( (cursorCPS + evaporatorCPS + factoryCPS + cloudGeneratorCPS + weatherMachineCPS + stormStationCPS + atmosphereManipulatorCPS + climateControllerCPS)*10)/10;
+    totalCPS = (Math.round( (cursorCPS + evaporatorCPS + factoryCPS + cloudGeneratorCPS + weatherMachineCPS + stormStationCPS + atmosphereManipulatorCPS + climateControllerCPS)*10)/10);
+    
 
-    document.getElementById('cloudsPerSecond').innerText = totalCPS.toFixed(1);
-    document.getElementById('cursorCPS').innerText = cursorCPS.toFixed(1);
-    document.getElementById('evaporatorCPS').innerText = evaporatorCPS;
-    document.getElementById('factoryCPS').innerText = factoryCPS;
-    document.getElementById('cloudGeneratorCPS').innerText = cloudGeneratorCPS;
-    document.getElementById('weatherMachineCPS').innerText = weatherMachineCPS;
-    document.getElementById('stormStationCPS').innerText = stormStationCPS;
-    document.getElementById('atmosphereManipulatorCPS').innerText = atmosphereManipulatorCPS;
-    document.getElementById('climateControllerCPS').innerText = climateControllerCPS;
-    document.getElementById('currentAmountPerClick').innerText = gameState.currentAmountPerClick;
+    document.getElementById('cloudsPerSecond').innerText = totalCPS.toLocaleString('en-US');
+    document.getElementById('cursorCPS').innerText = cursorCPS.toLocaleString('en-US');
+    document.getElementById('evaporatorCPS').innerText = evaporatorCPS.toLocaleString('en-US');
+    document.getElementById('factoryCPS').innerText = factoryCPS.toLocaleString('en-US');
+    document.getElementById('cloudGeneratorCPS').innerText = cloudGeneratorCPS.toLocaleString('en-US');
+    document.getElementById('weatherMachineCPS').innerText = weatherMachineCPS.toLocaleString('en-US');
+    document.getElementById('stormStationCPS').innerText = stormStationCPS.toLocaleString('en-US');
+    document.getElementById('atmosphereManipulatorCPS').innerText = atmosphereManipulatorCPS.toLocaleString('en-US');
+    document.getElementById('climateControllerCPS').innerText = climateControllerCPS.toLocaleString('en-US');
+    document.getElementById('currentAmountPerClick').innerText = gameState.currentAmountPerClick.toLocaleString('en-US');
     document.getElementById('clickUpgradeCost').innerText = gameState.clickUpgradeCost;
 }
 
@@ -103,8 +104,8 @@ function updateGameState() {
 
 // Update cloud count displayed on UI
 function updateCloudCountDisplay() {
-    const roundedCloudCount = Math.round(gameState.cloudCount * 10) / 10; // Round the cloud count to one decimal place
-    document.getElementById('cloudCount').innerText = roundedCloudCount.toFixed(1); // Update cloud count with one decimal place
+    roundedCloudCount = Math.round(gameState.cloudCount * 10) / 10; // Round the cloud count to one decimal place
+    document.getElementById('cloudCount').innerText = roundedCloudCount.toLocaleString('en-US'); // Update cloud count with one decimal place
 }
 
 // Load initial game state
@@ -139,7 +140,7 @@ function buyClickUpgrade(){
 }
 
 function calculateCUCost(quantity, baseCost){
-    return Math.floor(baseCost  * Math.pow(10, (quantity - 1)));
+    return Math.floor(baseCost  * Math.pow(10, (quantity - 1 )));
 }
 
 // Cloud clicking function
@@ -262,38 +263,22 @@ function resetGame() {
     location.reload(); // Reload the page to reset the game
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    document.querySelectorAll('.upgrade-button .info').forEach(info => {
-        info.style.display = 'none'; // Hide info spans by default
-    });
-    
-    document.querySelectorAll('.upgrade-button').forEach(button => {
-        button.addEventListener('mouseenter', function() {
-            const info = this.querySelector('.info');
-            const rect = this.getBoundingClientRect();
-            const containerRect = document.querySelector('.container').getBoundingClientRect();
-    
-            // Check if there's enough space on the right side
-            if (rect.right + info.offsetWidth > containerRect.right - 50) {
-                info.style.left = 'auto';
-                info.style.right = '100%';
-            } else {
-                info.style.left = '100%';
-                info.style.right = 'auto';
-            }
-    
-            // Display the tooltip
-            info.style.display = 'flex';
-        });
-    
-        button.addEventListener('mouseleave', function() {
-            // Hide the tooltip when the mouse leaves the button
-            this.querySelector('.info').style.display = 'none';
-        });
-    });
-});
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
+function resetUpgrades() {
+    // Set all upgrade counts to 0
+    gameState.cursors = 0;
+    gameState.evaporators = 0;
+    gameState.factories = 0;
+    gameState.cloudGenerators = 0;
+    gameState.weatherMachines = 0;
+    gameState.stormStations = 0;
+    gameState.atmosphereManipulators = 0;
+    gameState.climateControllers = 0;
+    gameState.currentAmountPerClick = 1;
 
-
-
-
+    updateCPS();
+    updateCloudCountDisplay();
+}
