@@ -293,3 +293,35 @@ gameState.clickUpgradeCost = calculateCUCost(gameState.currentAmountPerClick, 10
     updateCPS();
     updateCloudCountDisplay();
 }
+document.addEventListener('DOMContentLoaded', function() {
+    const tooltip = document.getElementById('tooltip');
+    const upgradeButtons = document.querySelectorAll('.upgrade-button');
+    const middlePanel = document.querySelector('.middle-panel');
+
+    upgradeButtons.forEach(button => {
+        button.addEventListener('mouseover', function(event) {
+            const info = button.querySelector('.info').innerHTML;
+            tooltip.innerHTML = info;
+            tooltip.style.display = 'block';
+
+            // Get the middle panel's bounding rectangle
+            const middlePanelRect = middlePanel.getBoundingClientRect();
+            const buttonRect = event.target.getBoundingClientRect();
+
+            // Position the tooltip at the far right of the middle panel
+            tooltip.style.left = `${middlePanelRect.right - tooltip.offsetWidth}px`;
+            // Position the tooltip aligned with the button's vertical position
+            tooltip.style.top = `${buttonRect.top + window.scrollY}px`;
+        });
+
+        button.addEventListener('mousemove', function(event) {
+            const buttonRect = event.target.getBoundingClientRect();
+            // Adjust the tooltip top position to follow the cursor
+            tooltip.style.top = `${event.clientY + window.scrollY - 60}px`;
+        });
+
+        button.addEventListener('mouseout', function() {
+            tooltip.style.display = 'none';
+        });
+    });
+});

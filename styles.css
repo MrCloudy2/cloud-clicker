@@ -89,9 +89,7 @@ button.upgrade-button .info p {
     margin: 5px 0; /* Added margin to separate each piece of information */
 }
 
-button.upgrade-button:hover .info {
-    display: flex; /* Displays the info span as a flex container when the button is hovered */
-}
+
 .middle-panel{
     text-align: center; /* Centers the text inside the left panel */
     display: flex; /* Enables flexbox layout on the left panel */
@@ -116,3 +114,17 @@ button.upgrade-button:hover .info {
     width: 15px;
 }
 
+.tooltip {
+    display: none; /* Hidden by default */
+    position: absolute; /* Position it absolutely */
+    right: 0;
+    background-color: #fff; /* Background color */
+    color: #000; /* Text color */
+    padding: 10px; /* Padding */
+    border: 1px solid #000; /* Border */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for better visibility */
+    z-index: 1000; /* Ensure it appears above other elements */
+    width: max-content; /* Adjust the width to fit content */
+    white-space: nowrap; /* Prevent text wrapping */
+}
