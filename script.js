@@ -280,6 +280,16 @@ function resetUpgrades() {
     gameState.climateControllers = 0;
     gameState.currentAmountPerClick = 1;
 
+gameState.cursorCost = calculateCost(gameState.cursors, 10); // Updated cursor cost
+gameState.evaporatorCost = calculateCost(gameState.evaporators, 100); // New evaporator cost
+gameState.factoryCost = calculateCost(gameState.factories, 1000);
+gameState.cloudGeneratorCost = calculateCost(gameState.cloudGenerators, 5000);
+gameState.weatherMachineCost = calculateCost(gameState.weatherMachines, 20000);
+gameState.stormStationCost = calculateCost(gameState.stormStations, 100000);
+gameState.atmosphereManipulatorCost = calculateCost(gameState.atmosphereManipulators, 500000);
+gameState.climateControllerCost = calculateCost(gameState.climateControllers, 2000000);
+gameState.clickUpgradeCost = calculateCUCost(gameState.currentAmountPerClick, 10);
+
     updateCPS();
     updateCloudCountDisplay();
 }
