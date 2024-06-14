@@ -25,90 +25,57 @@
         </div>
         <div class="right-panel">
 
-            <button class="upgrade-button" onclick="buyClickUpgrade()">
+            <button class="upgrade-button" data-building-type="click"  onclick="buyClickUpgrade()">
                 Click Upgrade<br><img src="cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;"> 
             <span id="clickUpgradeCost"></span><br><span id="currentAmountPerClick"></span> per Click
             </button>
 
-            <button class="upgrade-button" onclick="buyCursor()">
+            <button class="upgrade-button" data-building-type="cursors" onclick="buyCursor()">
                 Buy Cursor
                 <span class="cost"><img src="cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;"> 
                 <span id="cursorCost">10</span></span>
-                <span class="info">
-                    <p>Amount: <span id="cursorCount">0</span></p>
-                    <p>CPS: 0.1</p>
-                    <p>Total CPS: <span id="cursorCPS">1</span></p>
-                </span>
             </button>
 
-            <button class="upgrade-button" onclick="buyEvaporator()">
+            <button class="upgrade-button" data-building-type="evaporators" onclick="buyEvaporator()">
                 Buy Evaporator <br>
                 <span class="cost"><img src="cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;"> 
                 <span id="evaporatorCost">100</span></span>
-                <span class="info">
-                <p>Amount:  <span id="evaporatorCount">0</span></p>
-                <p> CPS: 1 </p>
-                <p>Total CPS: <span id="evaporatorCPS">0</span></p>
             </button>
 
-            <button class="upgrade-button" onclick="buyFactory()">
+            <button class="upgrade-button" data-building-type="factories" onclick="buyFactory()">
                 Buy Factory <br>
                 <span class="cost"><img src="cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;"> 
                 <span id="factoryCost">100</span></span>
-                <span class="info">
-                    <p>Amount:  <span id="factoryCount">0</span> </p>
-                    <p> CPS: 5 </p>
-                    <p> Total CPS: <span id="factoryCPS">0</span></p>
             </button>
 
-            <button class="upgrade-button" onclick="buyCloudGenerator()">
+            <button class="upgrade-button" data-building-type="cloudGenerators" onclick="buyCloudGenerator()">
                 Buy Cloud Generator <br>
                 <span class="cost"><img src="cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;"> 
                 <span id="cloudGeneratorCost">500</span></span>
-                <span class="info">
-                    <p>Amount:  <span id="cloudGeneratorCount">0</span> </p>
-                    <p> CPS: 20 </p>
-                    <p> Total CPS: <span id="cloudGeneratorCPS">0</span></span></p>
             </button>
 
-            <button class="upgrade-button" onclick="buyWeatherMachine()">
+            <button class="upgrade-button" data-building-type="weatherMachines" onclick="buyWeatherMachine()">
                 Buy Weather Machine <br>
                 <span class="cost"><img src="cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;"> 
                 <span id="weatherMachineCost">2000</span></span>
-                <span class="info">
-                    <p>Amount: <span id="weatherMachineCount">0</span> </p>
-                    <p> CPS: 50 </p>
-                    <p>Total CPS: <span id="weatherMachineCPS">0</span></span></p>
             </button>
 
-            <button class="upgrade-button" onclick="buyStormStation()">
+            <button class="upgrade-button" data-building-type="stormStations" onclick="buyStormStation()">
                 Buy Storm Station <br>
                 <span class="cost"><img src="cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;"> 
                 <span id="stormStationCost">10000</span></span>
-                <span class="info">
-                    <p>Amount:  <span id="stormStationCount">0</span> </p>
-                    <p> CPS: 100 </p>
-                    <p> Total CPS: <span id="stormStationCPS">0</span></span></p>
             </button>
 
-            <button class="upgrade-button" onclick="buyAtmosphereManipulator()">
+            <button class="upgrade-button" data-building-type="atmosphereManipulators" onclick="buyAtmosphereManipulator()">
                 Buy Atmosphere Manipulator <br>
                 <span class="cost"><img src="cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;">  
                 <span id="atmosphereManipulatorCost">50000</span></span>
-                <span class="info">
-                    <p>Amount:  <span id="atmosphereManipulatorCount">0</span> </p>
-                    <p> CPS: 200 </p>
-                    <p> Total CPS: <span id="atmosphereManipulatorCPS">0</span></span></p>
             </button>
 
-            <button class="upgrade-button" onclick="buyClimateController()">
+            <button class="upgrade-button" data-building-type="climateControllers" onclick="buyClimateController()">
                 Buy Climate Controller <br>
                 <span class="cost"><img src="cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;"> 
                 <span id="climateControllerCost">200000</span></span>
-                <span class="info">
-                    <p>Amount:  <span id="climateControllerCount">0</span></p>
-                    <p> CPS: 500 </p>
-                    <p> Total CPS: <span id="climateControllerCPS">0</span></span></p>
             </button>
     </div>
     <script src="script.js"></script>
