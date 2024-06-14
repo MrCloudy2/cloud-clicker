@@ -134,9 +134,6 @@ function buyCursor() {
         document.getElementById('cursorCost').innerText = gameState.cursorCost; // Update cursor cost
         saveGameState(); // Save the updated game state
         updateCPS(); // Update CPS display
-        const tooltip = document.getElementById('tooltip');
-        const buildingType = 'cursors'; // Assuming 'cursors' for this example
-        tooltip.innerHTML = generateTooltipContent(buildingType);
     }
 }
 
@@ -263,9 +260,9 @@ gameState.clickUpgradeCost = calculateCUCost(gameState.currentAmountPerClick, 10
 
 
 
-//                                                                                //
-//                  MAIN DOING THINGS                       //
-//                                                                               //
+//                                                                                       //
+//                  MAIN DOING THINGS SHIT                     //
+//                                                                                       //
 
 // Load initial game state
 document.addEventListener('DOMContentLoaded', function() {
