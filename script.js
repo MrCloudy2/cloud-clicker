@@ -319,10 +319,12 @@ function generateTooltipContent(buildingType) {
             buildingCPS = defaultClimateControllerCps; 
             buildingCount = gameState.climateControllers;
             break;
-        case 'click':
-            buildingCPS = 0; 
-            buildingCount = gameState.currentAmountPerClick;
-            break;
+            case 'click':
+                return `
+                <span class="info">
+                    <p>Amount: <span id="buildingCount">${gameState.currentAmountPerClick}</span></p>
+                </span>
+            `;
         default:
             break;
     }
@@ -391,9 +393,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 buildingCount = gameState.climateControllers;
                 break;
         case 'click':
-            buildingCPS = 0; 
-            buildingCount = gameState.currentAmountPerClick;
-            break;
+            return `
+            <span class="info">
+                <p>Amount: <span id="buildingCount">${gameState.currentAmountPerClick}</span></p>
+            </span>
+        `;
             default:
                 break;
         }
