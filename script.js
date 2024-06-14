@@ -12,14 +12,6 @@ let gameState = JSON.parse(localStorage.getItem('gameState')) || {
     currentAmountPerClick: 1
 };
 
-// Function to calculate building costs based on quantity owned
-function calculateCost(quantity, baseCost) {
-    return Math.floor(baseCost * Math.pow(1.15, quantity));
-}
-
-
-checkAndCorrectValues();
-
 // Set initial costs based on default values
 gameState.cursorCost = calculateCost(gameState.cursors, 10); // Updated cursor cost
 gameState.evaporatorCost = calculateCost(gameState.evaporators, 100); // New evaporator cost
@@ -37,11 +29,15 @@ function saveGameState() {
     localStorage.setItem('gameState', JSON.stringify(gameState));
 }
 
+// Function to calculate building costs based on quantity owned
+function calculateCost(quantity, baseCost) {
+    return Math.floor(baseCost * Math.pow(1.15, quantity));
+}
+
 //cheats for development
 function setClouds(amount){
     gameState.cloudCount = amount;
 }
-
 
 // Function to check and correct NaN values
 function checkAndCorrectValues() {
@@ -59,7 +55,6 @@ function checkAndCorrectValues() {
     // Recalculate CPS
     updateCPS();
 }
-
 
 // Update CPS function
 function updateCPS() {
@@ -109,28 +104,6 @@ function updateCloudCountDisplay() {
     document.getElementById('cloudCount').innerText = roundedCloudCount.toLocaleString('en-US'); // Update cloud count with one decimal place
 }
 
-// Load initial game state
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('cloudCount').innerText = gameState.cloudCount;
-    document.getElementById('cursorCount').innerText = gameState.cursors;
-    document.getElementById('cursorCost').innerText = gameState.cursorCost;
-    document.getElementById('evaporatorCount').innerText = gameState.evaporators;
-    document.getElementById('evaporatorCost').innerText = gameState.evaporatorCost;
-    document.getElementById('factoryCount').innerText = gameState.factories;
-    document.getElementById('factoryCost').innerText = gameState.factoryCost;
-    document.getElementById('cloudGeneratorCount').innerText = gameState.cloudGenerators;
-    document.getElementById('cloudGeneratorCost').innerText = gameState.cloudGeneratorCost;
-    document.getElementById('weatherMachineCount').innerText = gameState.weatherMachines;
-    document.getElementById('weatherMachineCost').innerText = gameState.weatherMachineCost;
-    document.getElementById('stormStationCount').innerText = gameState.stormStations;
-    document.getElementById('stormStationCost').innerText = gameState.stormStationCost;
-    document.getElementById('atmosphereManipulatorCount').innerText = gameState.atmosphereManipulators;
-    document.getElementById('atmosphereManipulatorCost').innerText = gameState.atmosphereManipulatorCost;
-    document.getElementById('climateControllerCount').innerText = gameState.climateControllers;
-    document.getElementById('climateControllerCost').innerText = gameState.climateControllerCost;
-    updateCPS(); // Update CPS display
-});
-
 function buyClickUpgrade(){
     if(gameState.cloudCount >= gameState.clickUpgradeCost){
     gameState.currentAmountPerClick++;
@@ -140,6 +113,7 @@ function buyClickUpgrade(){
 
 }
 
+//salculate Clicker upgrade cost
 function calculateCUCost(quantity, baseCost){
     return Math.floor(baseCost  * Math.pow(10, (quantity - 1 )));
 }
@@ -155,13 +129,14 @@ function buyCursor() {
         gameState.cloudCount -= gameState.cursorCost;
         gameState.cursors++;
         gameState.cursorCost = Math.round(gameState.cursorCost * 1.15);
-        saveGameState(); // Save the updated game state
         document.getElementById('cursorCount').innerText = gameState.cursors; // Update cursor count
         document.getElementById('cursorCost').innerText = gameState.cursorCost; // Update cursor cost
+        saveGameState(); // Save the updated game state
         updateCPS(); // Update CPS display
     }
 }
 
+//buy evaporator
 function buyEvaporator() {
     if (gameState.cloudCount >= gameState.evaporatorCost) {
         gameState.cloudCount -= gameState.evaporatorCost;
@@ -252,12 +227,6 @@ function buyClimateController() {
     }
 }
 
-// Update game state and UI every second
-setInterval(function() {
-    updateGameState(); // Update game state
-    updateCloudCountDisplay(); // Update cloud count displayed on UI
-}, 100);
-
 // Function to reset the saved game state
 function resetGame() {
     localStorage.removeItem('gameState'); // Remove the saved game state from local storage
@@ -293,6 +262,55 @@ gameState.clickUpgradeCost = calculateCUCost(gameState.currentAmountPerClick, 10
     updateCPS();
     updateCloudCountDisplay();
 }
+
+function updateUpgradeCount(){
+    document.getElementById('cloudCount').innerText = gameState.cloudCount;
+    document.getElementById('cursorCount').innerText = gameState.cursors;
+    document.getElementById('evaporatorCount').innerText = gameState.evaporators;
+    document.getElementById('factoryCount').innerText = gameState.factories;
+    document.getElementById('cloudGeneratorCount').innerText = gameState.cloudGenerators;
+    document.getElementById('weatherMachineCount').innerText = gameState.weatherMachines;
+    document.getElementById('stormStationCount').innerText = gameState.stormStations;
+    document.getElementById('atmosphereManipulatorCount').innerText = gameState.atmosphereManipulators;
+    document.getElementById('climateControllerCount').innerText = gameState.climateControllers;
+}
+
+//                                                                                //
+//                  MAIN DOING THINGS                       //
+//                                                                               //
+
+// Load initial game state
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('cloudCount').innerText = gameState.cloudCount;
+    document.getElementById('cursorCount').innerText = gameState.cursors;
+    document.getElementById('cursorCost').innerText = gameState.cursorCost;
+    document.getElementById('evaporatorCount').innerText = gameState.evaporators;
+    document.getElementById('evaporatorCost').innerText = gameState.evaporatorCost;
+    document.getElementById('factoryCount').innerText = gameState.factories;
+    document.getElementById('factoryCost').innerText = gameState.factoryCost;
+    document.getElementById('cloudGeneratorCount').innerText = gameState.cloudGenerators;
+    document.getElementById('cloudGeneratorCost').innerText = gameState.cloudGeneratorCost;
+    document.getElementById('weatherMachineCount').innerText = gameState.weatherMachines;
+    document.getElementById('weatherMachineCost').innerText = gameState.weatherMachineCost;
+    document.getElementById('stormStationCount').innerText = gameState.stormStations;
+    document.getElementById('stormStationCost').innerText = gameState.stormStationCost;
+    document.getElementById('atmosphereManipulatorCount').innerText = gameState.atmosphereManipulators;
+    document.getElementById('atmosphereManipulatorCost').innerText = gameState.atmosphereManipulatorCost;
+    document.getElementById('climateControllerCount').innerText = gameState.climateControllers;
+    document.getElementById('climateControllerCost').innerText = gameState.climateControllerCost;
+    updateCPS(); // Update CPS display
+});
+
+
+
+// Update game state and UI every second
+setInterval(function() {
+    updateGameState(); // Update game state
+    updateCloudCountDisplay(); // Update cloud count displayed on UI
+    updateUpgradeCount()
+}, 100);
+
+
 document.addEventListener('DOMContentLoaded', function() {
     const tooltip = document.getElementById('tooltip');
     const upgradeButtons = document.querySelectorAll('.upgrade-button');
@@ -300,6 +318,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     upgradeButtons.forEach(button => {
         button.addEventListener('mouseover', function(event) {
+            updateUpgradeCount();
             const info = button.querySelector('.info').innerHTML;
             tooltip.innerHTML = info;
             tooltip.style.display = 'block';
@@ -325,3 +344,5 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+checkAndCorrectValues();
