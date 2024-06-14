@@ -264,7 +264,6 @@ gameState.clickUpgradeCost = calculateCUCost(gameState.currentAmountPerClick, 10
 }
 
 function updateUpgradeCount(){
-    document.getElementById('cloudCount').innerText = gameState.cloudCount;
     document.getElementById('cursorCount').innerText = gameState.cursors;
     document.getElementById('evaporatorCount').innerText = gameState.evaporators;
     document.getElementById('factoryCount').innerText = gameState.factories;
