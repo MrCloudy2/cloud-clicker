@@ -37,6 +37,7 @@ gameState.clickUpgradeCost = calculateCUCost(gameState.currentAmountPerClick, 10
 
 // Function to save game state to local storage
 function saveGameState() {
+    gameState.lastSaveTime = Date.now(); // Save the current timestamp
     localStorage.setItem('gameState', JSON.stringify(gameState));
 }
 
@@ -46,7 +47,7 @@ function calculateCost(quantity, baseCost) {
 }
 
 //cheats for development
-function setClouds(amount){
+function rccalc(amount){
     gameState.cloudCount = amount;
 }
 
@@ -81,36 +82,90 @@ function updateCPS() {
     totalCPS = (Math.round( (cursorCPS + evaporatorCPS + factoryCPS + cloudGeneratorCPS + weatherMachineCPS + stormStationCPS + atmosphereManipulatorCPS + climateControllerCPS)*10)/10);
     
 
-    document.getElementById('cloudsPerSecond').innerText = totalCPS.toLocaleString('en-US');
+    document.getElementById('cloudsPerSecond').innerText = formatLargeNumber(totalCPS);
 }
 
-// Update game state
+function playSound(id) {
+    if (isMuted) return; // Do not play sound if muted
+    const sound = document.getElementById(id);
+    sound.currentTime = 0; 
+    sound.play();
+}
+
+let isMuted = false;
+
+function toggleMute() {
+    isMuted = !isMuted;
+    const button = document.getElementById('muteButton');
+    button.innerText = isMuted ? '🔇' : '🔊';
+
+    const allSounds = document.querySelectorAll('audio');
+    allSounds.forEach(sound => {
+        sound.muted = isMuted;
+    });
+}
+
+function formatLargeNumber(num) {
+    if (num >= 1e42) return removeTrailingZeros((num / 1e42).toFixed(2)) + ' Tredecillion';
+    if (num >= 1e39) return removeTrailingZeros((num / 1e39).toFixed(2)) + ' Duodecillion';
+    if (num >= 1e36) return removeTrailingZeros((num / 1e36).toFixed(2)) + ' Undecillion';
+    if (num >= 1e33) return removeTrailingZeros((num / 1e33).toFixed(2)) + ' Decillion';
+    if (num >= 1e30) return removeTrailingZeros((num / 1e30).toFixed(2)) + ' Nonillion';
+    if (num >= 1e27) return removeTrailingZeros((num / 1e27).toFixed(2)) + ' Octillion';
+    if (num >= 1e24) return removeTrailingZeros((num / 1e24).toFixed(2)) + ' Septillion';
+    if (num >= 1e21) return removeTrailingZeros((num / 1e21).toFixed(2)) + ' Sextillion';
+    if (num >= 1e18) return removeTrailingZeros((num / 1e18).toFixed(2)) + ' Quintillion';
+    if (num >= 1e15) return removeTrailingZeros((num / 1e15).toFixed(2)) + ' Quadrillion';
+    if (num >= 1e12) return removeTrailingZeros((num / 1e12).toFixed(2)) + ' Trillion';
+    if (num >= 1e9) return removeTrailingZeros((num / 1e9).toFixed(2)) + ' Billion';
+    if (num >= 1e6) return removeTrailingZeros((num / 1e6).toFixed(2)) + ' Million';
+    if (num >= 1e3) return removeTrailingZeros((num / 1e3).toFixed(2)) + 'K';
+    return num.toLocaleString('en-US');
+}
+
+
+function removeTrailingZeros(numberString) {
+    return parseFloat(numberString).toString();
+}
+
+// Function to update game state and handle tab inactivity
 function updateGameState() {
-    gameState.cloudCount += (gameState.cursors * 0.1) /10;
-    gameState.cloudCount += gameState.evaporators /10;
-    gameState.cloudCount += (gameState.factories * 5)/10; // Factories produce 5 clouds per second
-    gameState.cloudCount += (gameState.cloudGenerators * 20) /10; // Cloud Generators produce 20 clouds per second
-    gameState.cloudCount += (gameState.weatherMachines * 50) /10; // Weather Machines produce 50 clouds per second
-    gameState.cloudCount +=( gameState.stormStations * 100) /10; // Storm Stations produce 100 clouds per second
-    gameState.cloudCount += (gameState.atmosphereManipulators * 200) /10; // Atmosphere Manipulators produce 200 clouds per second
-    gameState.cloudCount += (gameState.climateControllers * 500) /10; // Climate Controllers produce 500 clouds per second
+    let now = Date.now();
+    let timeDiffInSeconds = (now - gameState.lastSaveTime) / 1000; // Time difference in seconds
+
+    // Only if game has been saved before (i.e., returning to the game)
+    if (gameState.lastSaveTime) {
+        let missedClouds = totalCPS * timeDiffInSeconds; // Calculate clouds earned during inactive time
+        gameState.cloudCount += missedClouds;
+    }
+
+    // Update current cloud count based on active time (same as before)
+    gameState.cloudCount += (gameState.cursors * defaultCursorCps) / 10;
+    gameState.cloudCount += (gameState.evaporators * defaultEvaporatorCps) / 10;
+    gameState.cloudCount += (gameState.factories * defaultFactoryCps) / 10;
+    gameState.cloudCount += (gameState.cloudGenerators * defaultCloudGeneratorCps) / 10;
+    gameState.cloudCount += (gameState.weatherMachines * defaultWeatherMachineCps) / 10;
+    gameState.cloudCount += (gameState.stormStations * defaultStormStationCps) / 10;
+    gameState.cloudCount += (gameState.atmosphereManipulators * defaultAtmosphereManipulatorCps) / 10;
+    gameState.cloudCount += (gameState.climateControllers * defaultClimateControllerCps) / 10;
 
     saveGameState(); // Save the updated game state
     updateCPS(); // Update CPS display
 }
-
 // Update cloud count displayed on UI
 function updateCloudCountDisplay() {
     roundedCloudCount = Math.round(gameState.cloudCount * 10) / 10; // Round the cloud count to one decimal place
-    document.getElementById('cloudCount').innerText = roundedCloudCount.toLocaleString('en-US'); // Update cloud count with one decimal place
+    document.getElementById('cloudCount').innerText = formatLargeNumber(roundedCloudCount); // Update cloud count with one decimal place
 }
+
 
 function buyClickUpgrade(){
     if(gameState.cloudCount >= gameState.clickUpgradeCost){
     gameState.currentAmountPerClick++;
     gameState.cloudCount = gameState.cloudCount - gameState.clickUpgradeCost;
     gameState.clickUpgradeCost = gameState.clickUpgradeCost * 10;
-    document.getElementById('clickUpgradeCost').innerText = gameState.clickUpgradeCost
+    document.getElementById('clickUpgradeCost').innerText = formatLargeNumber(gameState.clickUpgradeCost)
+    playSound('purchaseSound');
     }
 
 }
@@ -120,9 +175,15 @@ function calculateCUCost(quantity, baseCost){
     return Math.floor(baseCost  * Math.pow(10, (quantity - 1 )));
 }
 
-// Cloud clicking function
+let clickCooldown = false;
+
 function clickCloud() {
-    gameState.cloudCount = gameState.cloudCount + gameState.currentAmountPerClick;
+    if (clickCooldown) return;
+    gameState.cloudCount += gameState.currentAmountPerClick;
+    updateCloudCountDisplay();
+    playSound('clickSound');
+    clickCooldown = true;
+    setTimeout(() => clickCooldown = false, 5); // 5ms throttle
 }
 
 // Buy cursor function
@@ -131,9 +192,10 @@ function buyCursor() {
         gameState.cloudCount -= gameState.cursorCost;
         gameState.cursors++;
         gameState.cursorCost = Math.round(gameState.cursorCost * 1.15);
-        document.getElementById('cursorCost').innerText = gameState.cursorCost; // Update cursor cost
+        document.getElementById('cursorCost').innerText = formatLargeNumber(gameState.cursorCost); // Update cursor cost
         saveGameState(); // Save the updated game state
         updateCPS(); // Update CPS display
+        playSound('purchaseSound');
     }
 }
 
@@ -144,8 +206,9 @@ function buyEvaporator() {
         gameState.evaporators++;
         gameState.evaporatorCost = Math.round(gameState.evaporatorCost * 1.15);
         saveGameState(); // Save the updated game state
-        document.getElementById('evaporatorCost').innerText = gameState.evaporatorCost; // Update cursor cost
+        document.getElementById('evaporatorCost').innerText = formatLargeNumber(gameState.evaporatorCost); // Update cursor cost
         updateCPS(); // Update CPS display
+        playSound('purchaseSound');
     }
 }
 
@@ -156,8 +219,9 @@ function buyFactory() {
         gameState.factories++;
         gameState.factoryCost = Math.round(gameState.factoryCost * 1.15);
         saveGameState(); // Save the updated game state
-        document.getElementById('factoryCost').innerText = gameState.factoryCost; // Update factory cost
+        document.getElementById('factoryCost').innerText = formatLargeNumber(gameState.factoryCost); // Update factory cost
         updateCPS(); // Update CPS display
+        playSound('purchaseSound');
     }
 }
 
@@ -168,8 +232,9 @@ function buyCloudGenerator() {
         gameState.cloudGenerators++;
         gameState.cloudGeneratorCost = Math.round(gameState.cloudGeneratorCost * 1.15);
         saveGameState(); // Save the updated game state
-        document.getElementById('cloudGeneratorCost').innerText = gameState.cloudGeneratorCost; // Update cloud generator cost
+        document.getElementById('cloudGeneratorCost').innerText = formatLargeNumber(gameState.cloudGeneratorCost); // Update cloud generator cost
         updateCPS(); // Update CPS display
+        playSound('purchaseSound');
     }
 }
 
@@ -180,8 +245,9 @@ function buyWeatherMachine() {
         gameState.weatherMachines++;
         gameState.weatherMachineCost = Math.round(gameState.weatherMachineCost * 1.15);
         saveGameState(); // Save the updated game state
-        document.getElementById('weatherMachineCost').innerText = gameState.weatherMachineCost; // Update weather machine cost
+        document.getElementById('weatherMachineCost').innerText = formatLargeNumber(gameState.weatherMachineCost); // Update weather machine cost
         updateCPS(); // Update CPS display
+        playSound('purchaseSound');
     }
 }
 
@@ -192,8 +258,9 @@ function buyStormStation() {
         gameState.stormStations++;
         gameState.stormStationCost = Math.round(gameState.stormStationCost * 1.15);
         saveGameState(); // Save the updated game state
-        document.getElementById('stormStationCost').innerText = gameState.stormStationCost; // Update storm station cost
+        document.getElementById('stormStationCost').innerText = formatLargeNumber(gameState.stormStationCost); // Update storm station cost
         updateCPS(); // Update CPS display
+        playSound('purchaseSound');
     }
 }
 
@@ -204,8 +271,9 @@ function buyAtmosphereManipulator() {
         gameState.atmosphereManipulators++;
         gameState.atmosphereManipulatorCost = Math.round(gameState.atmosphereManipulatorCost * 1.15);
         saveGameState(); // Save the updated game state
-        document.getElementById('atmosphereManipulatorCost').innerText = gameState.atmosphereManipulatorCost; // Update atmosphere manipulator cost
+        document.getElementById('atmosphereManipulatorCost').innerText = formatLargeNumber(gameState.atmosphereManipulatorCost); // Update atmosphere manipulator cost
         updateCPS(); // Update CPS display
+        playSound('purchaseSound');
     }
 }
 
@@ -217,8 +285,9 @@ function buyClimateController() {
         gameState.climateControllerCost = Math.round(gameState.climateControllerCost * 1.15);
 
         saveGameState(); // Save the updated game state
-        document.getElementById('climateControllerCost').innerText = gameState.climateControllerCost; // Update climate controller cost
+        document.getElementById('climateControllerCost').innerText = formatLargeNumber(gameState.climateControllerCost); // Update climate controller cost
         updateCPS(); // Update CPS display
+        playSound('purchaseSound');
     }
 }
 
@@ -266,16 +335,16 @@ gameState.clickUpgradeCost = calculateCUCost(gameState.currentAmountPerClick, 10
 
 // Load initial game state
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('cloudCount').innerText = gameState.cloudCount;
-    document.getElementById('cursorCost').innerText = gameState.cursorCost;
-    document.getElementById('evaporatorCost').innerText = gameState.evaporatorCost;
-    document.getElementById('factoryCost').innerText = gameState.factoryCost;
-    document.getElementById('cloudGeneratorCost').innerText = gameState.cloudGeneratorCost;
-    document.getElementById('weatherMachineCost').innerText = gameState.weatherMachineCost;
-    document.getElementById('stormStationCost').innerText = gameState.stormStationCost;
-    document.getElementById('atmosphereManipulatorCost').innerText = gameState.atmosphereManipulatorCost;
-    document.getElementById('climateControllerCost').innerText = gameState.climateControllerCost;
-    document.getElementById('clickUpgradeCost').innerText = gameState.clickUpgradeCost
+    document.getElementById('cloudCount').innerText = formatLargeNumber(gameState.cloudCount);
+    document.getElementById('cursorCost').innerText = formatLargeNumber(gameState.cursorCost);
+    document.getElementById('evaporatorCost').innerText = formatLargeNumber(gameState.evaporatorCost);
+    document.getElementById('factoryCost').innerText = formatLargeNumber(gameState.factoryCost);
+    document.getElementById('cloudGeneratorCost').innerText = formatLargeNumber(gameState.cloudGeneratorCost);
+    document.getElementById('weatherMachineCost').innerText = formatLargeNumber(gameState.weatherMachineCost);
+    document.getElementById('stormStationCost').innerText = formatLargeNumber(gameState.stormStationCost);
+    document.getElementById('atmosphereManipulatorCost').innerText = formatLargeNumber(gameState.atmosphereManipulatorCost);
+    document.getElementById('climateControllerCost').innerText = formatLargeNumber(gameState.climateControllerCost);
+    document.getElementById('clickUpgradeCost').innerText = formatLargeNumber(gameState.clickUpgradeCost);
     updateCPS(); // Update CPS display
 });
 
@@ -349,6 +418,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Default CPS value
 
+// Detect when the tab becomes active
+document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) {
+        updateGameState(); // Update the game state when the player returns to the tab
+        updateCloudCountDisplay(); // Update cloud count displayed on UI
+    }
+});
 
 
     // Function to generate tooltip content

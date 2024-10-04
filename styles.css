@@ -41,6 +41,10 @@ body {
     margin: 20px 0; /* Adds vertical margin above and below the cloud container */
     text-align: center; /* Centers the content inside the cloud container */
 }
+.cloud:active {
+    transform: scale(0.96); /* Shrinks cloud briefly */
+    transition: transform 0.2s ease-in-out;
+}
 
 .cloud img {
     width: 350px; /* Sets the width of the cloud image */
@@ -128,3 +132,4 @@ button.upgrade-button .info p {
     width: max-content; /* Adjust the width to fit content */
     white-space: nowrap; /* Prevent text wrapping */
 }
+

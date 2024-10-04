@@ -20,10 +20,13 @@
         </div>
         <div class="middle-panel">
                 <div id="tooltip" class="tooltip"></div>
+                <button id="muteButton" onclick="toggleMute()">🔊</button>
         </div>
         <div class="divider2">
         </div>
         <div class="right-panel">
+
+            
 
             <button class="upgrade-button" data-building-type="click"  onclick="buyClickUpgrade()">
                 Click Upgrade<br><img src="cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;"> 
@@ -78,7 +81,10 @@
                 <span id="climateControllerCost">200000</span></span>
             </button>
     </div>
+    <audio id="clickSound" src="sounds/click.mp3"></audio>
+    <audio id="purchaseSound" src="sounds/buy.mp3"></audio>
     <script src="script.js"></script>
     <script src="tooltip.js"></script> <!-- Include the tooltip.js file -->
+
 </body>
 </html>
