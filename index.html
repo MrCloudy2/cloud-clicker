@@ -21,6 +21,11 @@
         <div class="middle-panel">
                 <div id="tooltip" class="tooltip"></div>
                 <button id="muteButton" onclick="toggleMute()">🔊</button>
+                <button id="saveButton" onclick="saveGameState()">Save Game</button>
+                <button id="exportSaveButton" onclick="exportSave()">Export Save</button>
+                <input type="file" id="importSaveButton" accept=".json" style="display: none;" onchange="importSave(event)">
+                <button onclick="document.getElementById('importSaveButton').click()">Import Save</button>
+                <button id="wipeSaveButton" onclick="wipeSave()">Wipe Save</button>
         </div>
         <div class="divider2">
         </div>
@@ -85,6 +90,21 @@
     <audio id="purchaseSound" src="sounds/buy.mp3"></audio>
     <script src="script.js"></script>
     <script src="tooltip.js"></script> <!-- Include the tooltip.js file -->
+    <script>
+        var reloadInterval = 100; // Set the reload interval in milliseconds
+    
+        if (document.hidden !== undefined) {
+            document.addEventListener('visibilitychange', handleVisibilityChange);
+        }
+    
+        function handleVisibilityChange() {
+            if (document.hidden) {
+                console.log('Tab is inactive. Refreshing page...');
+                setTimeout(function(){ updateGameState(); updateCloudCountDisplay(); }, reloadInterval)
+                
+            }
+        }
+    </script>
 
 </body>
 </html>

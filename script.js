@@ -34,12 +34,67 @@ gameState.atmosphereManipulatorCost = calculateCost(gameState.atmosphereManipula
 gameState.climateControllerCost = calculateCost(gameState.climateControllers, 2000000);
 gameState.clickUpgradeCost = calculateCUCost(gameState.currentAmountPerClick, 10);
 
+let lastSaveTime = Date.now(); // Track the last time the game was saved
+
+function autoSave() {
+    const now = Date.now();
+    const timeElapsed = now - lastSaveTime;
+
+    // Save every 60 seconds (60000 ms)
+    if (timeElapsed >= 6000) {
+        saveGameState();
+        lastSaveTime = now;
+    }
+
+    // Keep the loop running with requestAnimationFrame
+    requestAnimationFrame(autoSave);
+}
+
+// Start auto-save when the page is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    requestAnimationFrame(autoSave);
+});
 
 // Function to save game state to local storage
 function saveGameState() {
-    gameState.lastSaveTime = Date.now(); // Save the current timestamp
-    localStorage.setItem('gameState', JSON.stringify(gameState));
+    gameState.lastSaveTime = Date.now(); // Store the last save time
+    localStorage.setItem('gameState', JSON.stringify(gameState)); // Save to localStorage
+    console.log('Game saved!');
 }
+
+function exportSave() {
+    const saveData = JSON.stringify(gameState, null, 2); // Convert game state to formatted JSON string
+    const blob = new Blob([saveData], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'cloud_clicker_save.json'; // Filename for the save file
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a); // Clean up
+}
+
+function importSave(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const importedData = JSON.parse(e.target.result);
+        gameState = { ...gameState, ...importedData }; // Merge with existing gameState
+        saveGameState(); // Save the imported data to localStorage
+        location.reload(); // Reload to apply the new state
+    };
+    reader.readAsText(file);
+}
+
+function wipeSave() {
+    if (confirm("Are you sure you want to wipe your save? This cannot be undone!")) {
+        localStorage.removeItem('gameState'); // Remove the saved game state
+        location.reload(); // Reload the page to reset the game
+    }
+}
+
 
 // Function to calculate building costs based on quantity owned
 function calculateCost(quantity, baseCost) {
@@ -130,15 +185,6 @@ function removeTrailingZeros(numberString) {
 
 // Function to update game state and handle tab inactivity
 function updateGameState() {
-    let now = Date.now();
-    let timeDiffInSeconds = (now - gameState.lastSaveTime) / 1000; // Time difference in seconds
-
-    // Only if game has been saved before (i.e., returning to the game)
-    if (gameState.lastSaveTime) {
-        let missedClouds = totalCPS * timeDiffInSeconds; // Calculate clouds earned during inactive time
-        gameState.cloudCount += missedClouds;
-    }
-
     // Update current cloud count based on active time (same as before)
     gameState.cloudCount += (gameState.cursors * defaultCursorCps) / 10;
     gameState.cloudCount += (gameState.evaporators * defaultEvaporatorCps) / 10;
@@ -148,8 +194,6 @@ function updateGameState() {
     gameState.cloudCount += (gameState.stormStations * defaultStormStationCps) / 10;
     gameState.cloudCount += (gameState.atmosphereManipulators * defaultAtmosphereManipulatorCps) / 10;
     gameState.cloudCount += (gameState.climateControllers * defaultClimateControllerCps) / 10;
-
-    saveGameState(); // Save the updated game state
     updateCPS(); // Update CPS display
 }
 // Update cloud count displayed on UI
@@ -193,7 +237,6 @@ function buyCursor() {
         gameState.cursors++;
         gameState.cursorCost = Math.round(gameState.cursorCost * 1.15);
         document.getElementById('cursorCost').innerText = formatLargeNumber(gameState.cursorCost); // Update cursor cost
-        saveGameState(); // Save the updated game state
         updateCPS(); // Update CPS display
         playSound('purchaseSound');
     }
@@ -205,7 +248,6 @@ function buyEvaporator() {
         gameState.cloudCount -= gameState.evaporatorCost;
         gameState.evaporators++;
         gameState.evaporatorCost = Math.round(gameState.evaporatorCost * 1.15);
-        saveGameState(); // Save the updated game state
         document.getElementById('evaporatorCost').innerText = formatLargeNumber(gameState.evaporatorCost); // Update cursor cost
         updateCPS(); // Update CPS display
         playSound('purchaseSound');
@@ -218,7 +260,6 @@ function buyFactory() {
         gameState.cloudCount -= gameState.factoryCost;
         gameState.factories++;
         gameState.factoryCost = Math.round(gameState.factoryCost * 1.15);
-        saveGameState(); // Save the updated game state
         document.getElementById('factoryCost').innerText = formatLargeNumber(gameState.factoryCost); // Update factory cost
         updateCPS(); // Update CPS display
         playSound('purchaseSound');
@@ -231,7 +272,6 @@ function buyCloudGenerator() {
         gameState.cloudCount -= gameState.cloudGeneratorCost;
         gameState.cloudGenerators++;
         gameState.cloudGeneratorCost = Math.round(gameState.cloudGeneratorCost * 1.15);
-        saveGameState(); // Save the updated game state
         document.getElementById('cloudGeneratorCost').innerText = formatLargeNumber(gameState.cloudGeneratorCost); // Update cloud generator cost
         updateCPS(); // Update CPS display
         playSound('purchaseSound');
@@ -244,7 +284,6 @@ function buyWeatherMachine() {
         gameState.cloudCount -= gameState.weatherMachineCost;
         gameState.weatherMachines++;
         gameState.weatherMachineCost = Math.round(gameState.weatherMachineCost * 1.15);
-        saveGameState(); // Save the updated game state
         document.getElementById('weatherMachineCost').innerText = formatLargeNumber(gameState.weatherMachineCost); // Update weather machine cost
         updateCPS(); // Update CPS display
         playSound('purchaseSound');
@@ -257,7 +296,6 @@ function buyStormStation() {
         gameState.cloudCount -= gameState.stormStationCost;
         gameState.stormStations++;
         gameState.stormStationCost = Math.round(gameState.stormStationCost * 1.15);
-        saveGameState(); // Save the updated game state
         document.getElementById('stormStationCost').innerText = formatLargeNumber(gameState.stormStationCost); // Update storm station cost
         updateCPS(); // Update CPS display
         playSound('purchaseSound');
@@ -270,7 +308,6 @@ function buyAtmosphereManipulator() {
         gameState.cloudCount -= gameState.atmosphereManipulatorCost;
         gameState.atmosphereManipulators++;
         gameState.atmosphereManipulatorCost = Math.round(gameState.atmosphereManipulatorCost * 1.15);
-        saveGameState(); // Save the updated game state
         document.getElementById('atmosphereManipulatorCost').innerText = formatLargeNumber(gameState.atmosphereManipulatorCost); // Update atmosphere manipulator cost
         updateCPS(); // Update CPS display
         playSound('purchaseSound');
@@ -283,8 +320,6 @@ function buyClimateController() {
         gameState.cloudCount -= gameState.climateControllerCost;
         gameState.climateControllers++;
         gameState.climateControllerCost = Math.round(gameState.climateControllerCost * 1.15);
-
-        saveGameState(); // Save the updated game state
         document.getElementById('climateControllerCost').innerText = formatLargeNumber(gameState.climateControllerCost); // Update climate controller cost
         updateCPS(); // Update CPS display
         playSound('purchaseSound');
@@ -404,11 +439,7 @@ function generateTooltipContent(buildingType) {
     `;
 }
 
-// Update game state and UI every second
-setInterval(function() {
-    updateGameState(); // Update game state
-    updateCloudCountDisplay(); // Update cloud count displayed on UI
-}, 100);
+
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -418,13 +449,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Default CPS value
 
-// Detect when the tab becomes active
-document.addEventListener('visibilitychange', function() {
-    if (!document.hidden) {
-        updateGameState(); // Update the game state when the player returns to the tab
+
+
+    setInterval(function() {
+        updateGameState(); // Update game state
         updateCloudCountDisplay(); // Update cloud count displayed on UI
-    }
-});
+    }, 100);
+    
+    
 
 
     // Function to generate tooltip content
