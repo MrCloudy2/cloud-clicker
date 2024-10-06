@@ -41,8 +41,9 @@ function autoSave() {
     const timeElapsed = now - lastSaveTime;
 
     // Save every 60 seconds (60000 ms)
-    if (timeElapsed >= 6000) {
+    if (timeElapsed >= 60000) {
         saveGameState();
+
         lastSaveTime = now;
     }
 
@@ -58,35 +59,81 @@ document.addEventListener('DOMContentLoaded', function() {
 // Function to save game state to local storage
 function saveGameState() {
     gameState.lastSaveTime = Date.now(); // Store the last save time
+    updateCloudCountDisplay();
     localStorage.setItem('gameState', JSON.stringify(gameState)); // Save to localStorage
+    showSaveNotification();  // Show the "Saving..." notification
     console.log('Game saved!');
 }
 
+// Show the modal for exporting save data
 function exportSave() {
-    const saveData = JSON.stringify(gameState, null, 2); // Convert game state to formatted JSON string
-    const blob = new Blob([saveData], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'cloud_clicker_save.json'; // Filename for the save file
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a); // Clean up
+    const saveData = JSON.stringify(gameState);  // Convert game state to JSON string
+    const base64Save = btoa(saveData);  // Encode JSON string into Base64
+
+    // Update the modal for export mode
+    document.getElementById('modalTitle').innerText = "Copy Your Save";
+    document.getElementById('saveString').value = base64Save;  // Set the encoded save string
+    document.getElementById('saveString').readOnly = true;     // Make the text area read-only for export
+    document.getElementById('exportButtons').style.display = 'block';  // Show the copy button
+    document.getElementById('importButton').style.display = 'none';  // Hide import button
+
+    // Show the modal
+    document.getElementById('saveModal').style.display = 'flex';
 }
 
-function importSave(event) {
-    const file = event.target.files[0];
-    if (!file) return;
+// Show the modal for importing save data
+function importSave() {
+    // Update the modal for import mode
+    document.getElementById('modalTitle').innerText = "Paste Your Save";
+    document.getElementById('saveString').value = '';  // Clear the text area for pasting
+    document.getElementById('saveString').readOnly = false;   // Allow user to paste
+    document.getElementById('exportButtons').style.display = 'none';  // Hide the copy button
+    document.getElementById('importButton').style.display = 'block';  // Show import button
 
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const importedData = JSON.parse(e.target.result);
-        gameState = { ...gameState, ...importedData }; // Merge with existing gameState
-        saveGameState(); // Save the imported data to localStorage
-        location.reload(); // Reload to apply the new state
-    };
-    reader.readAsText(file);
+    // Show the modal
+    document.getElementById('saveModal').style.display = 'flex';
 }
+
+// Copy the save data to the clipboard
+function copyToClipboard() {
+    const saveString = document.getElementById('saveString');
+    saveString.select();
+    saveString.setSelectionRange(0, 99999);  // Select the text
+
+    try {
+        document.execCommand('copy');
+        alert('Save copied to clipboard!');
+    } catch (err) {
+        alert('Failed to copy the save.');
+    }
+}
+
+// Load the pasted save data
+function loadPastedSave() {
+    const base64Input = document.getElementById('saveString').value;  // Get the pasted input
+
+    if (!base64Input) {
+        alert("Please paste a valid save string.");
+        return;
+    }
+
+    try {
+        const decodedSave = atob(base64Input);  // Decode the Base64 string back to JSON
+        const importedData = JSON.parse(decodedSave);  // Parse the JSON string
+        gameState = { ...gameState, ...importedData };  // Merge with existing game state
+        saveGameState();  // Save the imported data to localStorage
+        location.reload();  // Reload the page to apply the new state
+    } catch (e) {
+        alert("Invalid save data. Please check the format.");
+    }
+}
+
+// Close the modal
+function closeModal() {
+    document.getElementById('saveModal').style.display = 'none';
+}
+
+
 
 function wipeSave() {
     if (confirm("Are you sure you want to wipe your save? This cannot be undone!")) {
@@ -94,6 +141,15 @@ function wipeSave() {
         location.reload(); // Reload the page to reset the game
     }
 }
+
+function showSaveNotification() {
+    const notification = document.getElementById('saveNotification');
+    notification.style.display = 'block';  // Show the notification
+    setTimeout(() => {
+        notification.style.display = 'none';  // Hide the notification after 2 seconds
+    }, 2000);  // Duration of the message display (2 seconds)
+}
+
 
 
 // Function to calculate building costs based on quantity owned

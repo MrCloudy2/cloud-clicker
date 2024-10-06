@@ -23,9 +23,27 @@
                 <button id="muteButton" onclick="toggleMute()">🔊</button>
                 <button id="saveButton" onclick="saveGameState()">Save Game</button>
                 <button id="exportSaveButton" onclick="exportSave()">Export Save</button>
-                <input type="file" id="importSaveButton" accept=".json" style="display: none;" onchange="importSave(event)">
-                <button onclick="document.getElementById('importSaveButton').click()">Import Save</button>
+                <button id="importSaveButton" onclick="importSave()">Import Save</button>
                 <button id="wipeSaveButton" onclick="wipeSave()">Wipe Save</button>
+                        <!-- Modal for Export/Import Save -->
+            <div id="saveModal" style="display:none;">
+                <div class="modal-content">
+                    <h3 id="modalTitle">Copy or Paste Your Save</h3>
+                    
+                    <!-- Textarea for displaying or inputting the save data -->
+                    <textarea id="saveString" placeholder="Paste your save data here"></textarea>
+                    
+                    <!-- Buttons for actions -->
+                    <div id="exportButtons">
+                        <button id="copyButton" onclick="copyToClipboard()">Copy to Clipboard</button>
+                    </div>
+                    <button id="importButton" style="display:none;" onclick="loadPastedSave()">Load Save</button>
+                    <button onclick="closeModal()">Close</button>
+                </div>
+            </div>
+            <div id="saveNotification" style="display:none;">Saving...</div>
+
+
         </div>
         <div class="divider2">
         </div>
