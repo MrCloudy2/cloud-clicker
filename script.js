@@ -2,15 +2,25 @@
 let gameState = JSON.parse(localStorage.getItem('gameState')) || {
     cloudCount: 0,
     cursors: 0,
-    evaporators: 0, // New evaporator state
+    evaporators: 0,
     factories: 0,
     cloudGenerators: 0,
     weatherMachines: 0,
     stormStations: 0,
     atmosphereManipulators: 0,
     climateControllers: 0,
-    currentAmountPerClick: 1
+    currentAmountPerClick: 1,
+    globalMulti: 1,
+    cursorMulti: 1,
+    evaporatorMulti: 1,
+    factoryMulti: 1,
+    cloudGeneratorMulti: 1,
+    weatherMachineMulti: 1,
+    stormStationMulti: 1,
+    atmosphereManipulatorMulti: 1,
+    climateControllerMulti: 1
 };
+// cps values
 const defaultCursorCps = 0.1;
 const defaultEvaporatorCps = 1;
 const defaultFactoryCps = 5;
@@ -21,18 +31,25 @@ const defaultAtmosphereManipulatorCps = 200;
 const defaultClimateControllerCps = 500;
 
 
-
+let cursorCps;
+let evaporatorCps;
+let factoryCps;
+let cloudGeneratorCps;
+let weatherMachineCps;
+let stormStationCps;
+let atmosphereManipulatorCps;
+let climateControllerCps;
 
 // Set initial costs based on default values
-gameState.cursorCost = calculateCost(gameState.cursors, 10); // Updated cursor cost
-gameState.evaporatorCost = calculateCost(gameState.evaporators, 100); // New evaporator cost
-gameState.factoryCost = calculateCost(gameState.factories, 1000);
-gameState.cloudGeneratorCost = calculateCost(gameState.cloudGenerators, 5000);
-gameState.weatherMachineCost = calculateCost(gameState.weatherMachines, 20000);
-gameState.stormStationCost = calculateCost(gameState.stormStations, 100000);
-gameState.atmosphereManipulatorCost = calculateCost(gameState.atmosphereManipulators, 500000);
-gameState.climateControllerCost = calculateCost(gameState.climateControllers, 2000000);
-gameState.clickUpgradeCost = calculateCUCost(gameState.currentAmountPerClick, 10);
+let cursorCost = calculateCost(gameState.cursors, 10);
+let evaporatorCost = calculateCost(gameState.evaporators, 100);
+let factoryCost = calculateCost(gameState.factories, 1000);
+let cloudGeneratorCost = calculateCost(gameState.cloudGenerators, 5000);
+let weatherMachineCost = calculateCost(gameState.weatherMachines, 20000);
+let stormStationCost = calculateCost(gameState.stormStations, 100000);
+let atmosphereManipulatorCost = calculateCost(gameState.atmosphereManipulators, 500000);
+let climateControllerCost = calculateCost(gameState.climateControllers, 2000000);
+let clickUpgradeCost = calculateCUCost(gameState.currentAmountPerClick, 10);
 
 let lastSaveTime = Date.now(); // Track the last time the game was saved
 
@@ -181,16 +198,16 @@ function checkAndCorrectValues() {
 
 // Update CPS function
 function updateCPS() {
-    cursorCPS = Math.round(gameState.cursors * defaultCursorCps * 10)/10;
-    evaporatorCPS = gameState.evaporators * defaultEvaporatorCps;
-    factoryCPS = gameState.factories * defaultFactoryCps;
-    cloudGeneratorCPS = gameState.cloudGenerators * defaultCloudGeneratorCps;
-    weatherMachineCPS = gameState.weatherMachines * defaultWeatherMachineCps;
-    stormStationCPS = gameState.stormStations * defaultStormStationCps;
-    atmosphereManipulatorCPS = gameState.atmosphereManipulators * defaultAtmosphereManipulatorCps;
-    climateControllerCPS = gameState.climateControllers * defaultClimateControllerCps;
+    cursorCps = gameState.cursors * defaultCursorCps;
+    evaporatorCps = gameState.evaporators * defaultEvaporatorCps;
+    factoryCps = gameState.factories * defaultFactoryCps;
+    cloudGeneratorCps = gameState.cloudGenerators * defaultCloudGeneratorCps;
+    weatherMachineCps = gameState.weatherMachines * defaultWeatherMachineCps;
+    stormStationCps = gameState.stormStations * defaultStormStationCps;
+    atmosphereManipulatorCps = gameState.atmosphereManipulators * defaultAtmosphereManipulatorCps;
+    climateControllerCps = gameState.climateControllers * defaultClimateControllerCps;
 
-    totalCPS = (Math.round( (cursorCPS + evaporatorCPS + factoryCPS + cloudGeneratorCPS + weatherMachineCPS + stormStationCPS + atmosphereManipulatorCPS + climateControllerCPS)*10)/10);
+    totalCPS = (Math.round( (cursorCps + evaporatorCps + factoryCps + cloudGeneratorCps + weatherMachineCps + stormStationCps + atmosphereManipulatorCps + climateControllerCps)*10)/10);
     
 
     document.getElementById('cloudsPerSecond').innerText = formatLargeNumber(totalCPS);
@@ -216,108 +233,116 @@ function toggleMute() {
     });
 }
 
-function formatLargeNumber (num) {
-    if (num >= 1e303) return removeTrailingZeros((num / 1e303).toFixed(2)) + ' Centillion';
-    if (num >= 1e300) return removeTrailingZeros((num / 1e300).toFixed(2)) + ' Novemnonagintillion';
-    if (num >= 1e297) return removeTrailingZeros((num / 1e297).toFixed(2)) + ' Octononagintillion';
-    if (num >= 1e294) return removeTrailingZeros((num / 1e294).toFixed(2)) + ' Septennonagintillion';
-    if (num >= 1e291) return removeTrailingZeros((num / 1e291).toFixed(2)) + ' Senonagintillion';
-    if (num >= 1e288) return removeTrailingZeros((num / 1e288).toFixed(2)) + ' Quinnonagintillion';
-    if (num >= 1e285) return removeTrailingZeros((num / 1e285).toFixed(2)) + ' Quattuornonagintillion';
-    if (num >= 1e282) return removeTrailingZeros((num / 1e282).toFixed(2)) + ' Trenonagintillion';
-    if (num >= 1e279) return removeTrailingZeros((num / 1e279).toFixed(2)) + ' Duononagintillion';
-    if (num >= 1e276) return removeTrailingZeros((num / 1e276).toFixed(2)) + ' Unnonagintillion';
-    if (num >= 1e273) return removeTrailingZeros((num / 1e273).toFixed(2)) + ' Nonagintillion';
-    if (num >= 1e270) return removeTrailingZeros((num / 1e270).toFixed(2)) + ' Novemoctogintillion';
-    if (num >= 1e267) return removeTrailingZeros((num / 1e267).toFixed(2)) + ' Octooctogintillion';
-    if (num >= 1e264) return removeTrailingZeros((num / 1e264).toFixed(2)) + ' Septenoctogintillion';
-    if (num >= 1e261) return removeTrailingZeros((num / 1e261).toFixed(2)) + ' Sexoctogintillion';
-    if (num >= 1e258) return removeTrailingZeros((num / 1e258).toFixed(2)) + ' Quinoctogintillion';
-    if (num >= 1e255) return removeTrailingZeros((num / 1e255).toFixed(2)) + ' Quattuoroctogintillion';
-    if (num >= 1e252) return removeTrailingZeros((num / 1e252).toFixed(2)) + ' Tresoctogintillion';
-    if (num >= 1e249) return removeTrailingZeros((num / 1e249).toFixed(2)) + ' Duooctogintillion';
-    if (num >= 1e246) return removeTrailingZeros((num / 1e246).toFixed(2)) + ' Unoctogintillion';
-    if (num >= 1e243) return removeTrailingZeros((num / 1e243).toFixed(2)) + ' Octogintillion';
-    if (num >= 1e240) return removeTrailingZeros((num / 1e240).toFixed(2)) + ' Novemseptuagintillion';
-    if (num >= 1e237) return removeTrailingZeros((num / 1e237).toFixed(2)) + ' Octoseptuagintillion';
-    if (num >= 1e234) return removeTrailingZeros((num / 1e234).toFixed(2)) + ' Septenseptuagintillion';
-    if (num >= 1e231) return removeTrailingZeros((num / 1e231).toFixed(2)) + ' Sexseptuagintillion';
-    if (num >= 1e228) return removeTrailingZeros((num / 1e228).toFixed(2)) + ' Quinseptuagintillion';
-    if (num >= 1e225) return removeTrailingZeros((num / 1e225).toFixed(2)) + ' Quattuorseptuagintillion';
-    if (num >= 1e222) return removeTrailingZeros((num / 1e222).toFixed(2)) + ' Treseptuagintillion';
-    if (num >= 1e219) return removeTrailingZeros((num / 1e219).toFixed(2)) + ' Duoseptuagintillion';
-    if (num >= 1e216) return removeTrailingZeros((num / 1e216).toFixed(2)) + ' Unseptuagintillion';
-    if (num >= 1e213) return removeTrailingZeros((num / 1e213).toFixed(2)) + ' Septuagintillion';
-    if (num >= 1e210) return removeTrailingZeros((num / 1e210).toFixed(2)) + ' Novemsexagintillion';
-    if (num >= 1e207) return removeTrailingZeros((num / 1e207).toFixed(2)) + ' Octosexagintillion';
-    if (num >= 1e204) return removeTrailingZeros((num / 1e204).toFixed(2)) + ' Septensexagintillion';
-    if (num >= 1e201) return removeTrailingZeros((num / 1e201).toFixed(2)) + ' Sextosexagintillion';
-    if (num >= 1e198) return removeTrailingZeros((num / 1e198).toFixed(2)) + ' Quinsexagintillion';
-    if (num >= 1e195) return removeTrailingZeros((num / 1e195).toFixed(2)) + ' Quattuorsexagintillion';
-    if (num >= 1e192) return removeTrailingZeros((num / 1e192).toFixed(2)) + ' Tresexagintillion';
-    if (num >= 1e189) return removeTrailingZeros((num / 1e189).toFixed(2)) + ' Duosexagintillion';
-    if (num >= 1e186) return removeTrailingZeros((num / 1e186).toFixed(2)) + ' Unsexagintillion';
-    if (num >= 1e183) return removeTrailingZeros((num / 1e183).toFixed(2)) + ' Sexagintillion';
-    if (num >= 1e180) return removeTrailingZeros((num / 1e180).toFixed(2)) + ' Novemquinquagintillion';
-    if (num >= 1e177) return removeTrailingZeros((num / 1e177).toFixed(2)) + ' Octoquinquagintillion';
-    if (num >= 1e174) return removeTrailingZeros((num / 1e174).toFixed(2)) + ' Septenquinquagintillion';
-    if (num >= 1e171) return removeTrailingZeros((num / 1e171).toFixed(2)) + ' Sextoquinquagintillion';
-    if (num >= 1e168) return removeTrailingZeros((num / 1e168).toFixed(2)) + ' Quinquinquagintillion';
-    if (num >= 1e165) return removeTrailingZeros((num / 1e165).toFixed(2)) + ' Quattuorquinquagintillion';
-    if (num >= 1e162) return removeTrailingZeros((num / 1e162).toFixed(2)) + ' Trequinquagintillion';
-    if (num >= 1e159) return removeTrailingZeros((num / 1e159).toFixed(2)) + ' Duoquinquagintillion';
-    if (num >= 1e156) return removeTrailingZeros((num / 1e156).toFixed(2)) + ' Unquinquagintillion';
-    if (num >= 1e153) return removeTrailingZeros((num / 1e153).toFixed(2)) + ' Quinquagintillion';
-    if (num >= 1e150) return removeTrailingZeros((num / 1e150).toFixed(2)) + ' Novemquadragintillion';
-    if (num >= 1e147) return removeTrailingZeros((num / 1e147).toFixed(2)) + ' Octoquadragintillion';
-    if (num >= 1e144) return removeTrailingZeros((num / 1e144).toFixed(2)) + ' Septenquadragintillion';
-    if (num >= 1e141) return removeTrailingZeros((num / 1e141).toFixed(2)) + ' Sexquadragintillion';
-    if (num >= 1e138) return removeTrailingZeros((num / 1e138).toFixed(2)) + ' Quinquadragintillion';
-    if (num >= 1e135) return removeTrailingZeros((num / 1e135).toFixed(2)) + ' Quattuorquadragintillion';
-    if (num >= 1e132) return removeTrailingZeros((num / 1e132).toFixed(2)) + ' Tresquadragintillion';
-    if (num >= 1e129) return removeTrailingZeros((num / 1e129).toFixed(2)) + ' Duoquadragintillion';
-    if (num >= 1e126) return removeTrailingZeros((num / 1e126).toFixed(2)) + ' Unquadragintillion';
-    if (num >= 1e123) return removeTrailingZeros((num / 1e123).toFixed(2)) + ' Quadragintillion';
-    if (num >= 1e120) return removeTrailingZeros((num / 1e120).toFixed(2)) + ' Novemtrigintillion';
-    if (num >= 1e117) return removeTrailingZeros((num / 1e117).toFixed(2)) + ' Octotrigintillion';
-    if (num >= 1e114) return removeTrailingZeros((num / 1e114).toFixed(2)) + ' Septentrigintillion';
-    if (num >= 1e111) return removeTrailingZeros((num / 1e111).toFixed(2)) + ' Sextrigintillion';
-    if (num >= 1e108) return removeTrailingZeros((num / 1e108).toFixed(2)) + ' Quintrigintillion';
-    if (num >= 1e105) return removeTrailingZeros((num / 1e105).toFixed(2)) + ' Quattuortrigintillion';
-    if (num >= 1e102) return removeTrailingZeros((num / 1e102).toFixed(2)) + ' Trestrigintillion';
-    if (num >= 1e99) return removeTrailingZeros((num / 1e99).toFixed(2)) + ' Duotrigintillion';
-    if (num >= 1e96) return removeTrailingZeros((num / 1e96).toFixed(2)) + ' Untrigintillion';
-    if (num >= 1e93) return removeTrailingZeros((num / 1e93).toFixed(2)) + ' Trigintillion';
-    if (num >= 1e90) return removeTrailingZeros((num / 1e90).toFixed(2)) + ' Novemvigintillion';
-    if (num >= 1e87) return removeTrailingZeros((num / 1e87).toFixed(2)) + ' Octovigintillion';
-    if (num >= 1e84) return removeTrailingZeros((num / 1e84).toFixed(2)) + ' Septenvigintillion';
-    if (num >= 1e81) return removeTrailingZeros((num / 1e81).toFixed(2)) + ' Sexvigintillion';
-    if (num >= 1e78) return removeTrailingZeros((num / 1e78).toFixed(2)) + ' Quinvigintillion';
-    if (num >= 1e75) return removeTrailingZeros((num / 1e75).toFixed(2)) + ' Quattuorvigintillion';
-    if (num >= 1e72) return removeTrailingZeros((num / 1e72).toFixed(2)) + ' Tresvigintillion';
-    if (num >= 1e69) return removeTrailingZeros((num / 1e69).toFixed(2)) + ' Duovigintillion';
-    if (num >= 1e66) return removeTrailingZeros((num / 1e66).toFixed(2)) + ' Unvigintillion';
-    if (num >= 1e63) return removeTrailingZeros((num / 1e63).toFixed(2)) + ' Vigintillion';
-    if (num >= 1e60) return removeTrailingZeros((num / 1e60).toFixed(2)) + ' Novemdecillion';
-    if (num >= 1e57) return removeTrailingZeros((num / 1e57).toFixed(2)) + ' Octodecillion';
-    if (num >= 1e54) return removeTrailingZeros((num / 1e54).toFixed(2)) + ' Septendecillion';
-    if (num >= 1e51) return removeTrailingZeros((num / 1e51).toFixed(2)) + ' Sedecillion';
-    if (num >= 1e48) return removeTrailingZeros((num / 1e48).toFixed(2)) + ' Quindecillion';
-    if (num >= 1e45) return removeTrailingZeros((num / 1e45).toFixed(2)) + ' Quattuordecillion';
-    if (num >= 1e42) return removeTrailingZeros((num / 1e42).toFixed(2)) + ' Tredecilion';
-    if (num >= 1e39) return removeTrailingZeros((num / 1e39).toFixed(2)) + ' Duodecillion';
-    if (num >= 1e36) return removeTrailingZeros((num / 1e36).toFixed(2)) + ' Undecillion';
-    if (num >= 1e33) return removeTrailingZeros((num / 1e33).toFixed(2)) + ' Decillion';
-    if (num >= 1e30) return removeTrailingZeros((num / 1e30).toFixed(2)) + ' Nonillion';
-    if (num >= 1e27) return removeTrailingZeros((num / 1e27).toFixed(2)) + ' Octillion';
-    if (num >= 1e24) return removeTrailingZeros((num / 1e24).toFixed(2)) + ' Septillion';
-    if (num >= 1e21) return removeTrailingZeros((num / 1e21).toFixed(2)) + ' Sextillion';
-    if (num >= 1e18) return removeTrailingZeros((num / 1e18).toFixed(2)) + ' Quintillion';
-    if (num >= 1e15) return removeTrailingZeros((num / 1e15).toFixed(2)) + ' Quadrillion';
-    if (num >= 1e12) return removeTrailingZeros((num / 1e12).toFixed(2)) + ' Trillion';
-    if (num >= 1e9) return removeTrailingZeros((num / 1e9).toFixed(2)) + ' Billion';
-    if (num >= 1e6) return removeTrailingZeros((num / 1e6).toFixed(2)) + ' Million';
-    if (num >= 1e3) return removeTrailingZeros((num / 1e3).toFixed(2)) + 'K';
+function formatLargeNumber(num) {
+    const thresholds = [
+        { value: 1e303, suffix: ' Centillion' },
+        { value: 1e300, suffix: ' Novemnonagintillion' },
+        { value: 1e297, suffix: ' Octononagintillion' },
+        { value: 1e294, suffix: ' Septennonagintillion' },
+        { value: 1e291, suffix: ' Senonagintillion' },
+        { value: 1e288, suffix: ' Quinnonagintillion' },
+        { value: 1e285, suffix: ' Quattuornonagintillion' },
+        { value: 1e282, suffix: ' Trenonagintillion' },
+        { value: 1e279, suffix: ' Duononagintillion' },
+        { value: 1e276, suffix: ' Unnonagintillion' },
+        { value: 1e273, suffix: ' Nonagintillion' },
+        { value: 1e270, suffix: ' Novemoctogintillion' },
+        { value: 1e267, suffix: ' Octooctogintillion' },
+        { value: 1e264, suffix: ' Septenoctogintillion' },
+        { value: 1e261, suffix: ' Sexoctogintillion' },
+        { value: 1e258, suffix: ' Quinoctogintillion' },
+        { value: 1e255, suffix: ' Quattuoroctogintillion' },
+        { value: 1e252, suffix: ' Tresoctogintillion' },
+        { value: 1e249, suffix: ' Duooctogintillion' },
+        { value: 1e246, suffix: ' Unoctogintillion' },
+        { value: 1e243, suffix: ' Octogintillion' },
+        { value: 1e240, suffix: ' Novemseptuagintillion' },
+        { value: 1e237, suffix: ' Octoseptuagintillion' },
+        { value: 1e234, suffix: ' Septenseptuagintillion' },
+        { value: 1e231, suffix: ' Sexseptuagintillion' },
+        { value: 1e228, suffix: ' Quinseptuagintillion' },
+        { value: 1e225, suffix: ' Quattuorseptuagintillion' },
+        { value: 1e222, suffix: ' Treseptuagintillion' },
+        { value: 1e219, suffix: ' Duoseptuagintillion' },
+        { value: 1e216, suffix: ' Unseptuagintillion' },
+        { value: 1e213, suffix: ' Septuagintillion' },
+        { value: 1e210, suffix: ' Novemsexagintillion' },
+        { value: 1e207, suffix: ' Octosexagintillion' },
+        { value: 1e204, suffix: ' Septensexagintillion' },
+        { value: 1e201, suffix: ' Sextosexagintillion' },
+        { value: 1e198, suffix: ' Quinsexagintillion' },
+        { value: 1e195, suffix: ' Quattuorsexagintillion' },
+        { value: 1e192, suffix: ' Tresexagintillion' },
+        { value: 1e189, suffix: ' Duosexagintillion' },
+        { value: 1e186, suffix: ' Unsexagintillion' },
+        { value: 1e183, suffix: ' Sexagintillion' },
+        { value: 1e180, suffix: ' Novemquinquagintillion' },
+        { value: 1e177, suffix: ' Octoquinquagintillion' },
+        { value: 1e174, suffix: ' Septenquinquagintillion' },
+        { value: 1e171, suffix: ' Sextoquinquagintillion' },
+        { value: 1e168, suffix: ' Quinquinquagintillion' },
+        { value: 1e165, suffix: ' Quattuorquinquagintillion' },
+        { value: 1e162, suffix: ' Trequinquagintillion' },
+        { value: 1e159, suffix: ' Duoquinquagintillion' },
+        { value: 1e156, suffix: ' Unquinquagintillion' },
+        { value: 1e153, suffix: ' Quinquagintillion' },
+        { value: 1e150, suffix: ' Novemquadragintillion' },
+        { value: 1e147, suffix: ' Octoquadragintillion' },
+        { value: 1e144, suffix: ' Septenquadragintillion' },
+        { value: 1e141, suffix: ' Sexquadragintillion' },
+        { value: 1e138, suffix: ' Quinquadragintillion' },
+        { value: 1e135, suffix: ' Quattuorquadragintillion' },
+        { value: 1e132, suffix: ' Tresquadragintillion' },
+        { value: 1e129, suffix: ' Duoquadragintillion' },
+        { value: 1e126, suffix: ' Unquadragintillion' },
+        { value: 1e123, suffix: ' Quadragintillion' },
+        { value: 1e120, suffix: ' Novemtrigintillion' },
+        { value: 1e117, suffix: ' Octotrigintillion' },
+        { value: 1e114, suffix: ' Septentrigintillion' },
+        { value: 1e111, suffix: ' Sextrigintillion' },
+        { value: 1e108, suffix: ' Quintrigintillion' },
+        { value: 1e105, suffix: ' Quattuortrigintillion' },
+        { value: 1e102, suffix: ' Trestrigintillion' },
+        { value: 1e99, suffix: ' Duotrigintillion' },
+        { value: 1e96, suffix: ' Untrigintillion' },
+        { value: 1e93, suffix: ' Trigintillion' },
+        { value: 1e90, suffix: ' Novemvigintillion' },
+        { value: 1e87, suffix: ' Octovigintillion' },
+        { value: 1e84, suffix: ' Septenvigintillion' },
+        { value: 1e81, suffix: ' Sexvigintillion' },
+        { value: 1e78, suffix: ' Quinvigintillion' },
+        { value: 1e75, suffix: ' Quattuorvigintillion' },
+        { value: 1e72, suffix: ' Tresvigintillion' },
+        { value: 1e69, suffix: ' Duovigintillion' },
+        { value: 1e66, suffix: ' Unvigintillion' },
+        { value: 1e63, suffix: ' Vigintillion' },
+        { value: 1e60, suffix: ' Novemdecillion' },
+        { value: 1e57, suffix: ' Octodecillion' },
+        { value: 1e54, suffix: ' Septendecillion' },
+        { value: 1e51, suffix: ' Sedecillion' },
+        { value: 1e48, suffix: ' Quindecillion' },
+        { value: 1e45, suffix: ' Quattuordecillion' },
+        { value: 1e42, suffix: ' Tredecilion' },
+        { value: 1e39, suffix: ' Duodecillion' },
+        { value: 1e36, suffix: ' Undecillion' },
+        { value: 1e33, suffix: ' Decillion' },
+        { value: 1e30, suffix: ' Nonillion' },
+        { value: 1e27, suffix: ' Octillion' },
+        { value: 1e24, suffix: ' Septillion' },
+        { value: 1e21, suffix: ' Sextillion' },
+        { value: 1e18, suffix: ' Quintillion' },
+        { value: 1e15, suffix: ' Quadrillion' },
+        { value: 1e12, suffix: ' Trillion' },
+        { value: 1e9, suffix: ' Billion' },
+        { value: 1e6, suffix: ' Million' },
+        { value: 1e3, suffix: 'K' },
+    ];
+
+    for (const { value, suffix } of thresholds) {
+        if (num >= value) {
+            return removeTrailingZeros((num / value).toFixed(2)) + suffix;
+        }
+    }
     return num.toLocaleString('en-US');
 }
 
@@ -326,18 +351,20 @@ function removeTrailingZeros(numberString) {
     return parseFloat(numberString).toString();
 }
 
+
 // Function to update game state and handle tab inactivity
 function updateGameState() {
-    // Update current cloud count based on active time (same as before)
-    gameState.cloudCount += (gameState.cursors * defaultCursorCps) / 10;
-    gameState.cloudCount += (gameState.evaporators * defaultEvaporatorCps) / 10;
-    gameState.cloudCount += (gameState.factories * defaultFactoryCps) / 10;
-    gameState.cloudCount += (gameState.cloudGenerators * defaultCloudGeneratorCps) / 10;
-    gameState.cloudCount += (gameState.weatherMachines * defaultWeatherMachineCps) / 10;
-    gameState.cloudCount += (gameState.stormStations * defaultStormStationCps) / 10;
-    gameState.cloudCount += (gameState.atmosphereManipulators * defaultAtmosphereManipulatorCps) / 10;
-    gameState.cloudCount += (gameState.climateControllers * defaultClimateControllerCps) / 10;
-    updateCPS(); // Update CPS display
+    // Update current cloud count based on active time
+    updateCPS();
+    gameState.cloudCount += cursorCps / 10;
+    gameState.cloudCount += evaporatorCps / 10;
+    gameState.cloudCount += factoryCps / 10;
+    gameState.cloudCount += cloudGeneratorCps / 10;
+    gameState.cloudCount += weatherMachineCps / 10;
+    gameState.cloudCount += stormStationCps / 10;
+    gameState.cloudCount += atmosphereManipulatorCps / 10;
+    gameState.cloudCount += climateControllerCps / 10;
+     // Update CPS display
 }
 // Update cloud count displayed on UI
 function updateCloudCountDisplay() {
@@ -347,11 +374,11 @@ function updateCloudCountDisplay() {
 
 
 function buyClickUpgrade(){
-    if(gameState.cloudCount >= gameState.clickUpgradeCost){
+    if(gameState.cloudCount >= clickUpgradeCost ){
     gameState.currentAmountPerClick++;
-    gameState.cloudCount = gameState.cloudCount - gameState.clickUpgradeCost;
-    gameState.clickUpgradeCost = gameState.clickUpgradeCost * 10;
-    document.getElementById('clickUpgradeCost').innerText = formatLargeNumber(gameState.clickUpgradeCost)
+    gameState.cloudCount = gameState.cloudCount - clickUpgradeCost ;
+    clickUpgradeCost = clickUpgradeCost * 10;
+    document.getElementById('clickUpgradeCost').innerText = formatLargeNumber(clickUpgradeCost )
     playSound('purchaseSound');
     }
 
@@ -375,11 +402,11 @@ function clickCloud() {
 
 // Buy cursor function
 function buyCursor() {
-    if (gameState.cloudCount >= gameState.cursorCost) {
-        gameState.cloudCount -= gameState.cursorCost;
+    if (gameState.cloudCount >= cursorCost) {
+        gameState.cloudCount -= cursorCost;
         gameState.cursors++;
-        gameState.cursorCost = Math.round(gameState.cursorCost * 1.15);
-        document.getElementById('cursorCost').innerText = formatLargeNumber(gameState.cursorCost); // Update cursor cost
+        cursorCost = Math.round(cursorCost * 1.15);
+        document.getElementById('cursorCost').innerText = formatLargeNumber(cursorCost); // Update cursor cost
         updateCPS(); // Update CPS display
         playSound('purchaseSound');
     }
@@ -387,11 +414,11 @@ function buyCursor() {
 
 //buy evaporator
 function buyEvaporator() {
-    if (gameState.cloudCount >= gameState.evaporatorCost) {
-        gameState.cloudCount -= gameState.evaporatorCost;
+    if (gameState.cloudCount >= evaporatorCost) {
+        gameState.cloudCount -= evaporatorCost;
         gameState.evaporators++;
-        gameState.evaporatorCost = Math.round(gameState.evaporatorCost * 1.15);
-        document.getElementById('evaporatorCost').innerText = formatLargeNumber(gameState.evaporatorCost); // Update cursor cost
+        evaporatorCost = Math.round(evaporatorCost * 1.15);
+        document.getElementById('evaporatorCost').innerText = formatLargeNumber(evaporatorCost); // Update cursor cost
         updateCPS(); // Update CPS display
         playSound('purchaseSound');
     }
@@ -399,11 +426,11 @@ function buyEvaporator() {
 
 // Buy factory function
 function buyFactory() {
-    if (gameState.cloudCount >= gameState.factoryCost) {
-        gameState.cloudCount -= gameState.factoryCost;
+    if (gameState.cloudCount >= factoryCost) {
+        gameState.cloudCount -= factoryCost;
         gameState.factories++;
-        gameState.factoryCost = Math.round(gameState.factoryCost * 1.15);
-        document.getElementById('factoryCost').innerText = formatLargeNumber(gameState.factoryCost); // Update factory cost
+        factoryCost = Math.round(factoryCost * 1.15);
+        document.getElementById('factoryCost').innerText = formatLargeNumber(factoryCost); // Update factory cost
         updateCPS(); // Update CPS display
         playSound('purchaseSound');
     }
@@ -411,11 +438,11 @@ function buyFactory() {
 
 // Buy cloud generator function
 function buyCloudGenerator() {
-    if (gameState.cloudCount >= gameState.cloudGeneratorCost) {
-        gameState.cloudCount -= gameState.cloudGeneratorCost;
+    if (gameState.cloudCount >= cloudGeneratorCost) {
+        gameState.cloudCount -= cloudGeneratorCost;
         gameState.cloudGenerators++;
-        gameState.cloudGeneratorCost = Math.round(gameState.cloudGeneratorCost * 1.15);
-        document.getElementById('cloudGeneratorCost').innerText = formatLargeNumber(gameState.cloudGeneratorCost); // Update cloud generator cost
+        cloudGeneratorCost = Math.round(cloudGeneratorCost * 1.15);
+        document.getElementById('cloudGeneratorCost').innerText = formatLargeNumber(cloudGeneratorCost); // Update cloud generator cost
         updateCPS(); // Update CPS display
         playSound('purchaseSound');
     }
@@ -423,11 +450,11 @@ function buyCloudGenerator() {
 
 // Buy weather machine function
 function buyWeatherMachine() {
-    if (gameState.cloudCount >= gameState.weatherMachineCost) {
-        gameState.cloudCount -= gameState.weatherMachineCost;
+    if (gameState.cloudCount >= weatherMachineCost) {
+        gameState.cloudCount -= weatherMachineCost;
         gameState.weatherMachines++;
-        gameState.weatherMachineCost = Math.round(gameState.weatherMachineCost * 1.15);
-        document.getElementById('weatherMachineCost').innerText = formatLargeNumber(gameState.weatherMachineCost); // Update weather machine cost
+        weatherMachineCost = Math.round(weatherMachineCost * 1.15);
+        document.getElementById('weatherMachineCost').innerText = formatLargeNumber(weatherMachineCost); // Update weather machine cost
         updateCPS(); // Update CPS display
         playSound('purchaseSound');
     }
@@ -435,11 +462,11 @@ function buyWeatherMachine() {
 
 // Buy storm station function
 function buyStormStation() {
-    if (gameState.cloudCount >= gameState.stormStationCost) {
-        gameState.cloudCount -= gameState.stormStationCost;
+    if (gameState.cloudCount >= stormStationCost) {
+        gameState.cloudCount -= stormStationCost;
         gameState.stormStations++;
-        gameState.stormStationCost = Math.round(gameState.stormStationCost * 1.15);
-        document.getElementById('stormStationCost').innerText = formatLargeNumber(gameState.stormStationCost); // Update storm station cost
+        stormStationCost = Math.round(stormStationCost * 1.15);
+        document.getElementById('stormStationCost').innerText = formatLargeNumber(stormStationCost); // Update storm station cost
         updateCPS(); // Update CPS display
         playSound('purchaseSound');
     }
@@ -447,11 +474,11 @@ function buyStormStation() {
 
 // Buy atmosphere manipulator function
 function buyAtmosphereManipulator() {
-    if (gameState.cloudCount >= gameState.atmosphereManipulatorCost) {
-        gameState.cloudCount -= gameState.atmosphereManipulatorCost;
+    if (gameState.cloudCount >= atmosphereManipulatorCost) {
+        gameState.cloudCount -= atmosphereManipulatorCost;
         gameState.atmosphereManipulators++;
-        gameState.atmosphereManipulatorCost = Math.round(gameState.atmosphereManipulatorCost * 1.15);
-        document.getElementById('atmosphereManipulatorCost').innerText = formatLargeNumber(gameState.atmosphereManipulatorCost); // Update atmosphere manipulator cost
+        atmosphereManipulatorCost = Math.round(atmosphereManipulatorCost * 1.15);
+        document.getElementById('atmosphereManipulatorCost').innerText = formatLargeNumber(atmosphereManipulatorCost); // Update atmosphere manipulator cost
         updateCPS(); // Update CPS display
         playSound('purchaseSound');
     }
@@ -459,11 +486,11 @@ function buyAtmosphereManipulator() {
 
 // Buy climate controller function
 function buyClimateController() {
-    if (gameState.cloudCount >= gameState.climateControllerCost) {
-        gameState.cloudCount -= gameState.climateControllerCost;
+    if (gameState.cloudCount >= climateControllerCost) {
+        gameState.cloudCount -= climateControllerCost;
         gameState.climateControllers++;
-        gameState.climateControllerCost = Math.round(gameState.climateControllerCost * 1.15);
-        document.getElementById('climateControllerCost').innerText = formatLargeNumber(gameState.climateControllerCost); // Update climate controller cost
+        climateControllerCost = Math.round(climateControllerCost * 1.15);
+        document.getElementById('climateControllerCost').innerText = formatLargeNumber(climateControllerCost); // Update climate controller cost
         updateCPS(); // Update CPS display
         playSound('purchaseSound');
     }
@@ -491,15 +518,15 @@ function resetUpgrades() {
     gameState.climateControllers = 0;
     gameState.currentAmountPerClick = 1;
 
-gameState.cursorCost = calculateCost(gameState.cursors, 10); // Updated cursor cost
-gameState.evaporatorCost = calculateCost(gameState.evaporators, 100); // New evaporator cost
-gameState.factoryCost = calculateCost(gameState.factories, 1000);
-gameState.cloudGeneratorCost = calculateCost(gameState.cloudGenerators, 5000);
-gameState.weatherMachineCost = calculateCost(gameState.weatherMachines, 20000);
-gameState.stormStationCost = calculateCost(gameState.stormStations, 100000);
-gameState.atmosphereManipulatorCost = calculateCost(gameState.atmosphereManipulators, 500000);
-gameState.climateControllerCost = calculateCost(gameState.climateControllers, 2000000);
-gameState.clickUpgradeCost = calculateCUCost(gameState.currentAmountPerClick, 10);
+cursorCost = calculateCost(gameState.cursors, 10); // Updated cursor cost
+evaporatorCost = calculateCost(gameState.evaporators, 100); // New evaporator cost
+factoryCost = calculateCost(gameState.factories, 1000);
+cloudGeneratorCost = calculateCost(gameState.cloudGenerators, 5000);
+weatherMachineCost = calculateCost(gameState.weatherMachines, 20000);
+stormStationCost = calculateCost(gameState.stormStations, 100000);
+atmosphereManipulatorCost = calculateCost(gameState.atmosphereManipulators, 500000);
+climateControllerCost = calculateCost(gameState.climateControllers, 2000000);
+clickUpgradeCost = calculateCUCost(gameState.currentAmountPerClick, 10);
 
     updateCPS();
     updateCloudCountDisplay();
@@ -514,15 +541,15 @@ gameState.clickUpgradeCost = calculateCUCost(gameState.currentAmountPerClick, 10
 // Load initial game state
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('cloudCount').innerText = formatLargeNumber(gameState.cloudCount);
-    document.getElementById('cursorCost').innerText = formatLargeNumber(gameState.cursorCost);
-    document.getElementById('evaporatorCost').innerText = formatLargeNumber(gameState.evaporatorCost);
-    document.getElementById('factoryCost').innerText = formatLargeNumber(gameState.factoryCost);
-    document.getElementById('cloudGeneratorCost').innerText = formatLargeNumber(gameState.cloudGeneratorCost);
-    document.getElementById('weatherMachineCost').innerText = formatLargeNumber(gameState.weatherMachineCost);
-    document.getElementById('stormStationCost').innerText = formatLargeNumber(gameState.stormStationCost);
-    document.getElementById('atmosphereManipulatorCost').innerText = formatLargeNumber(gameState.atmosphereManipulatorCost);
-    document.getElementById('climateControllerCost').innerText = formatLargeNumber(gameState.climateControllerCost);
-    document.getElementById('clickUpgradeCost').innerText = formatLargeNumber(gameState.clickUpgradeCost);
+    document.getElementById('cursorCost').innerText = formatLargeNumber(cursorCost);
+    document.getElementById('evaporatorCost').innerText = formatLargeNumber(evaporatorCost);
+    document.getElementById('factoryCost').innerText = formatLargeNumber(factoryCost);
+    document.getElementById('cloudGeneratorCost').innerText = formatLargeNumber(cloudGeneratorCost);
+    document.getElementById('weatherMachineCost').innerText = formatLargeNumber(weatherMachineCost);
+    document.getElementById('stormStationCost').innerText = formatLargeNumber(stormStationCost);
+    document.getElementById('atmosphereManipulatorCost').innerText = formatLargeNumber(atmosphereManipulatorCost);
+    document.getElementById('climateControllerCost').innerText = formatLargeNumber(climateControllerCost);
+    document.getElementById('clickUpgradeCost').innerText = formatLargeNumber(clickUpgradeCost );
     updateCPS(); // Update CPS display
 });
 
@@ -606,39 +633,48 @@ document.addEventListener('DOMContentLoaded', function() {
     function generateTooltipContent(buildingType) {
         let buildingCPS = 0;
         let buildingCount = 0;
+        let buildingCost;
 
         switch (buildingType) {
             case 'cursors':
                 buildingCPS = defaultCursorCps;
                 buildingCount = gameState.cursors;
+                buildingCost = cursorCost;
                 break;
             case 'evaporators':
                 buildingCPS = defaultEvaporatorCps;
                 buildingCount = gameState.evaporators;
+                buildingCost = evaporatorCost;
                 break;
             case 'factories':
                 buildingCPS = defaultFactoryCps; 
                 buildingCount = gameState.factories;
+                buildingCost = factoryCost;
                 break;
             case 'cloudGenerators':
                 buildingCPS = defaultCloudGeneratorCps; 
                 buildingCount = gameState.cloudGenerators;
+                buildingCost = cloudGeneratorCost;
                 break;
             case 'weatherMachines':
                 buildingCPS = defaultWeatherMachineCps; 
                 buildingCount = gameState.weatherMachines;
+                buildingCost = weatherMachineCost;
                 break;
             case 'stormStations':
                 buildingCPS = defaultStormStationCps; 
                 buildingCount = gameState.stormStations;
+                buildingCost = stormStationCost;
                 break;
             case 'atmosphereManipulators':
                 buildingCPS = defaultAtmosphereManipulatorCps; 
                 buildingCount = gameState.atmosphereManipulators;
+                buildingCost = atmosphereManipulatorCost;
                 break;
             case 'climateControllers':
                 buildingCPS = defaultClimateControllerCps; 
                 buildingCount = gameState.climateControllers;
+                buildingCost = climateControllerCost;
                 break;
         case 'click':
             return `
@@ -655,16 +691,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 <p>Amount: <span id="buildingCount">${buildingCount}</span></p>
                 <p>CPS: ${buildingCPS}</p>
                 <p>Total CPS: <span id="BuildingCPS">${(buildingCount * buildingCPS).toFixed(1)}</span></p>
+                <p>ROI cost:   <span id="BuildingCPS">${(buildingCost / buildingCPS)}</span></p>
+                
             </span>
         `;
     }
 
-    // Tooltip content for each building type
-    const tooltipData = {
-        cursors: { count: gameState.cursors, cps: cursorCPS },
-        evaporators: { count: gameState.evaporators, cps: evaporatorCPS },
-        // Define other building types similarly
-    };
 
     upgradeButtons.forEach(button => {
         const buildingType = button.getAttribute('data-building-type');
@@ -677,11 +709,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const buttonRect = event.target.getBoundingClientRect();
 
             tooltip.style.left = `${middlePanelRect.right - tooltip.offsetWidth}px`;
-            tooltip.style.top = `${buttonRect.top + window.scrollY}px`;
+            tooltip.style.top = `${event.clientY + window.scrollY -30}px`;
         });
 
         button.addEventListener('mousemove', function(event) {
-            tooltip.style.top = `${event.clientY + window.scrollY - 60}px`;
+            tooltip.style.top = `${event.clientY + window.scrollY - 30}px`;
         });
 
         button.addEventListener('mouseout', function() {

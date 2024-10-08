@@ -17,7 +17,7 @@ body {
 }
 
 .middle-panel, .right-panel{
-    background-image: url('backgroundR.png');
+    background-image: url("game assets/pictures/backgroundR.png");
     background-size: cover; /* Adjust this value to fit your needs */
     background-repeat: no-repeat; /* Prevent the background from repeating */
     background-position: center; /* Center the background image */
@@ -31,7 +31,7 @@ body {
     height: 100vh;
     max-width: 500px;
     min-width: 300px;
-    background-image: url('backgound.png');
+    background-image: url('game assets/pictures/background.png');
     background-size: cover; /* Adjust this value to fit your needs */
     background-repeat: no-repeat; /* Prevent the background from repeating */
     background-position: center; /* Center the background image */
@@ -124,13 +124,20 @@ button.upgrade-button .info p {
     right: 0;
     background-color: #fff; /* Background color */
     color: #000; /* Text color */
-    padding: 10px; /* Padding */
+    padding: 4px; /* Padding */
     border: 1px solid #000; /* Border */
     border-radius: 5px; /* Rounded corners */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for better visibility */
     z-index: 1000; /* Ensure it appears above other elements */
     width: max-content; /* Adjust the width to fit content */
     white-space: nowrap; /* Prevent text wrapping */
+    line-height: 1 !important; /* Force line-height to apply */
+}
+
+.tooltip p, .tooltip span {
+    line-height: 1; /* Apply to child elements */
+    margin: 0; /* Remove any default margins */
+    padding: 0; /* Remove any extra padding */
 }
 
 #saveModal {

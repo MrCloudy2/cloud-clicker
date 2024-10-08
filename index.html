@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cloud Clicker Game</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="cloudlogo.png">
+    <link rel="icon" href="game assets\pictures\cloudlogo.png">
 </head>
 <body>
         <div class="left-panel">
@@ -13,7 +13,7 @@
             <h2>CPS: <span id="cloudsPerSecond">0</span></h2>
             <h3>Clouds: <span id="cloudCount">0</span></h3>
             <div class="cloud" onclick="clickCloud()">
-                <img src="cloud.png" alt="Cloud">
+                <img src="game assets\pictures\cloud.png" alt="Cloud">
             </div>
         </div>
         <div class="divider1">
@@ -52,60 +52,60 @@
             
 
             <button class="upgrade-button" data-building-type="click"  onclick="buyClickUpgrade()">
-                Click Upgrade<br><img src="cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;"> 
+                Click Upgrade<br><img src="game assets\pictures\cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;"> 
             <span id="clickUpgradeCost"></span><br><span id="currentAmountPerClick"></span> per Click
             </button>
 
             <button class="upgrade-button" data-building-type="cursors" onclick="buyCursor()">
                 Buy Cursor
-                <span class="cost"><img src="cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;"> 
+                <span class="cost"><img src="game assets\pictures\cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;"> 
                 <span id="cursorCost">10</span></span>
             </button>
 
             <button class="upgrade-button" data-building-type="evaporators" onclick="buyEvaporator()">
                 Buy Evaporator <br>
-                <span class="cost"><img src="cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;"> 
+                <span class="cost"><img src="game assets\pictures\cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;"> 
                 <span id="evaporatorCost">100</span></span>
             </button>
 
             <button class="upgrade-button" data-building-type="factories" onclick="buyFactory()">
                 Buy Factory <br>
-                <span class="cost"><img src="cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;"> 
+                <span class="cost"><img src="game assets\pictures\cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;"> 
                 <span id="factoryCost">100</span></span>
             </button>
 
             <button class="upgrade-button" data-building-type="cloudGenerators" onclick="buyCloudGenerator()">
                 Buy Cloud Generator <br>
-                <span class="cost"><img src="cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;"> 
+                <span class="cost"><img src="game assets\pictures\cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;"> 
                 <span id="cloudGeneratorCost">500</span></span>
             </button>
 
             <button class="upgrade-button" data-building-type="weatherMachines" onclick="buyWeatherMachine()">
                 Buy Weather Machine <br>
-                <span class="cost"><img src="cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;"> 
+                <span class="cost"><img src="game assets\pictures\cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;"> 
                 <span id="weatherMachineCost">2000</span></span>
             </button>
 
             <button class="upgrade-button" data-building-type="stormStations" onclick="buyStormStation()">
                 Buy Storm Station <br>
-                <span class="cost"><img src="cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;"> 
+                <span class="cost"><img src="game assets\pictures\cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;"> 
                 <span id="stormStationCost">10000</span></span>
             </button>
 
             <button class="upgrade-button" data-building-type="atmosphereManipulators" onclick="buyAtmosphereManipulator()">
                 Buy Atmosphere Manipulator <br>
-                <span class="cost"><img src="cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;">  
+                <span class="cost"><img src="game assets\pictures\cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;">  
                 <span id="atmosphereManipulatorCost">50000</span></span>
             </button>
 
             <button class="upgrade-button" data-building-type="climateControllers" onclick="buyClimateController()">
                 Buy Climate Controller <br>
-                <span class="cost"><img src="cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;"> 
+                <span class="cost"><img src="game assets\pictures\cloudlogoBlack.png" alt="Cloud icon" style="width: 25px; height: auto;"> 
                 <span id="climateControllerCost">200000</span></span>
             </button>
     </div>
-    <audio id="clickSound" src="sounds/click.mp3"></audio>
-    <audio id="purchaseSound" src="sounds/buy.mp3"></audio>
+    <audio id="clickSound" src="game assets\sounds\click.mp3"></audio>
+    <audio id="purchaseSound" src="game assets\sounds\buy.mp3"></audio>
     <script src="script.js"></script>
     <script src="tooltip.js"></script> <!-- Include the tooltip.js file -->
     <script>
