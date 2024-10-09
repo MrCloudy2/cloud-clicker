@@ -54,23 +54,13 @@ let clickUpgradeCost = calculateCUCost(gameState.currentAmountPerClick, 10);
 let lastSaveTime = Date.now(); // Track the last time the game was saved
 
 function autoSave() {
-    const now = Date.now();
-    const timeElapsed = now - lastSaveTime;
-
-    // Save every 60 seconds (60000 ms)
-    if (timeElapsed >= 60000) {
-        saveGameState();
-
-        lastSaveTime = now;
-    }
-
-    // Keep the loop running with requestAnimationFrame
-    requestAnimationFrame(autoSave);
+    saveGameState(); // Save the game state
 }
 
 // Start auto-save when the page is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    requestAnimationFrame(autoSave);
+    // Call autoSave every 60 seconds (60000 ms)
+    setInterval(autoSave, 60000);
 });
 
 // Function to save game state to local storage
