@@ -356,14 +356,14 @@ function removeTrailingZeros(numberString) {
 function updateGameState() {
     // Update current cloud count based on active time
     updateCPS();
-    gameState.cloudCount += cursorCps / 10;
-    gameState.cloudCount += evaporatorCps / 10;
-    gameState.cloudCount += factoryCps / 10;
-    gameState.cloudCount += cloudGeneratorCps / 10;
-    gameState.cloudCount += weatherMachineCps / 10;
-    gameState.cloudCount += stormStationCps / 10;
-    gameState.cloudCount += atmosphereManipulatorCps / 10;
-    gameState.cloudCount += climateControllerCps / 10;
+    gameState.cloudCount += gameState.globalMulti * gameState.cursorMulti * (cursorCps / 10);
+    gameState.cloudCount += gameState.globalMulti * gameState.evaporatorMulti * (evaporatorCps / 10);
+    gameState.cloudCount += gameState.globalMulti * gameState.factoryMulti * (factoryCps / 10);
+    gameState.cloudCount += gameState.globalMulti * gameState.cloudGeneratorMulti * (cloudGeneratorCps / 10);
+    gameState.cloudCount += gameState.globalMulti * gameState.weatherMachineMulti * (weatherMachineCps / 10);
+    gameState.cloudCount += gameState.globalMulti * gameState.stormStationMulti * (stormStationCps / 10);
+    gameState.cloudCount += gameState.globalMulti * gameState.atmosphereManipulatorMulti * (atmosphereManipulatorCps / 10);
+    gameState.cloudCount += gameState.globalMulti * gameState.climateControllerMulti * (climateControllerCps / 10); 
      // Update CPS display
 }
 // Update cloud count displayed on UI
