@@ -19,21 +19,54 @@
         <div class="divider1">
         </div>
         <div class="middle-panel">
-                <div id="tooltip" class="tooltip"></div>
-                <button id="muteButton" onclick="toggleMute()">🔊</button>
-                <button id="saveButton" onclick="saveGameState()">Save Game</button>
-                <button id="exportSaveButton" onclick="exportSave()">Export Save</button>
-                <button id="importSaveButton" onclick="importSave()">Import Save</button>
-                <button id="wipeSaveButton" onclick="wipeSave()">Wipe Save</button>
-                        <!-- Modal for Export/Import Save -->
+            <!-- Tabs -->
+            <div class="tab-container">
+                <button class="tab-button active" onclick="openTab(event, 'gameInfoTab')">Buildings</button>
+                <button class="tab-button" onclick="openTab(event, 'achievementsTab')">Achievements</button>
+                <button class="tab-button" onclick="openTab(event, 'settingsTab')">Settings</button>
+            </div>
+        
+            <!-- Tab Contents -->
+            <div id="gameInfoTab" class="tab-content" style="display: block;">
+                <h3>Buildings</h3>
+                <p></p>
+            </div>
+        
+            <div id="achievementsTab" class="tab-content">
+                <h3>Achievements</h3>
+                <p>W.I.P</p>
+            </div>
+        
+            <div id="settingsTab" class="tab-content">
+                <h3>Settings</h3>
+                <div class="settings-option">
+                    <button id="muteButton" onclick="toggleMute()">🔊 Mute</button>
+                    <p>Toggle game sounds on or off.</p>
+                </div>
+                <div class="settings-option">
+                    <button id="saveButton" onclick="saveGameState()">Save Game</button>
+                    <p>Save your current game progress.</p>
+                </div>
+                <div class="settings-option">
+                    <button id="exportSaveButton" onclick="exportSave()">Export Save</button>
+                    <p>Export your game save data to a file.</p>
+                </div>
+                <div class="settings-option">
+                    <button id="importSaveButton" onclick="importSave()">Import Save</button>
+                    <p>Import previously saved game data.</p>
+                </div>
+                <div class="settings-option">
+                    <button id="wipeSaveButton" onclick="wipeSave()">Wipe Save</button>
+                    <p>Reset your game and wipe all saved data.</p>
+                </div>
+            </div>
+            
+            
+            <!-- Modal and Notifications -->
             <div id="saveModal" style="display:none;">
                 <div class="modal-content">
                     <h3 id="modalTitle">Copy or Paste Your Save</h3>
-                    
-                    <!-- Textarea for displaying or inputting the save data -->
                     <textarea id="saveString" placeholder="Paste your save data here"></textarea>
-                    
-                    <!-- Buttons for actions -->
                     <div id="exportButtons">
                         <button id="copyButton" onclick="copyToClipboard()">Copy to Clipboard</button>
                     </div>
@@ -42,9 +75,8 @@
                 </div>
             </div>
             <div id="saveNotification" style="display:none;">Saving...</div>
-
-
         </div>
+        
         <div class="divider2">
         </div>
         <div class="right-panel">

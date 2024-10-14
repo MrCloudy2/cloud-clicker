@@ -177,3 +177,84 @@ textarea {
     display: none; /* Hidden by default */
     z-index: 1000;
 }
+
+/* Tab container */
+.tab-container {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+}
+
+/* Tab buttons */
+.tab-button {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #f1f1f1;
+    border: none;
+    outline: none;
+    transition: background-color 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for better visibility */
+}
+
+.tab-button:hover {
+    background-color: #ddd;
+}
+
+.tab-button.active {
+    background-color: #ccc;
+}
+
+/* Tab content */
+.tab-content {
+    display: none;
+}
+
+.tab-content h3 {
+    margin-top: 0;
+}
+
+.settings-option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* General button styling */
+.settings-option button {
+    padding: 10px 15px;
+    font-size: 16px;
+    width: 120px;
+    height: 40px;
+    background-color: #4CAF50; /* Default green color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-right: 15px;
+}
+
+/* Red styling for the Wipe Save button */
+#wipeSaveButton {
+    background-color: #f44336; /* Red color */
+}
+
+#wipeSaveButton:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+}
+
+.settings-option button:hover {
+    background-color: #45a049; /* Slightly darker shade on hover */
+}
+
+/* Description styling */
+.settings-option p {
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+}
+
+/* Align button to the left and description to the right */
+.settings-option {
+    justify-content: flex-start;
+}

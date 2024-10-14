@@ -215,7 +215,7 @@ let isMuted = false;
 function toggleMute() {
     isMuted = !isMuted;
     const button = document.getElementById('muteButton');
-    button.innerText = isMuted ? '🔇' : '🔊';
+    button.innerText = isMuted ? '🔇Unmute' : '🔊 mute';
 
     const allSounds = document.querySelectorAll('audio');
     allSounds.forEach(sound => {
@@ -521,6 +521,29 @@ clickUpgradeCost = calculateCUCost(gameState.currentAmountPerClick, 10);
     updateCPS();
     updateCloudCountDisplay();
 }
+
+function openTab(event, tabId) {
+    // Hide all tab content
+    var tabContents = document.getElementsByClassName('tab-content');
+    for (var i = 0; i < tabContents.length; i++) {
+        tabContents[i].style.display = 'none';
+    }
+
+    // Remove the active class from all tab buttons
+    var tabButtons = document.getElementsByClassName('tab-button');
+    for (var i = 0; i < tabButtons.length; i++) {
+        tabButtons[i].classList.remove('active');
+    }
+
+    // Show the selected tab content and set the active tab button
+    document.getElementById(tabId).style.display = 'block';
+    event.currentTarget.classList.add('active');
+}
+
+// Set the default active tab
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelector('.tab-button').click();
+});
 
 
 
