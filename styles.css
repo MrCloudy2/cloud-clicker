@@ -1,7 +1,7 @@
 body {
     font-family: Arial; /* Sets the font family for the entire page */
     display: flex; /* Enables flexbox layout on the body */
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center; /* Centers the container vertically */
     height: 100vh; /* Sets the height of the body to 100% of the viewport height */
     background-color: #1c2229; /* Sets the background color of the body */
@@ -21,6 +21,10 @@ body {
     background-size: cover; /* Adjust this value to fit your needs */
     background-repeat: no-repeat; /* Prevent the background from repeating */
     background-position: center; /* Center the background image */
+}
+
+.left-panel, .right-panel {
+    flex: 0.8; /* Larger flex values for the left and right panels */
 }
 
 .left-panel {
@@ -100,22 +104,23 @@ button.upgrade-button .info p {
     flex-direction: column; /* Arranges children elements in a column */
     align-items: center; /* Centers children elements horizontally */
     height: 100vh;
+    flex: 1; /* Smaller flex value reduces the width of the middle panel */
 }
 
 .right-panel {
+    flex: 0.6;
     display: flex; /* Enables flexbox layout on the right panel */
     flex-direction: column; /* Arranges children elements in a column */
-    align-items: center; /* Aligns children elements to the end of the cross axis (right) */
+    align-items: flex-start; /* Aligns children elements to the end of the cross axis (right) */
     padding: 20px; /* Adds padding inside the right panel */
     height: 100vh; /* Sets maximum height of the right panel */
     overflow-y: auto; /* Adds vertical scrollbar if content overflows */
-    max-width: 20%;
-    min-width: 20%;
     overflow-y: auto; /* Adds vertical scrollbar if content overflows */
 }
 .divider1, .divider2{
     height: 100vh;
     width: 15px;
+    flex-shrink: 0;
 }
 
 .tooltip {
@@ -159,6 +164,8 @@ button.upgrade-button .info p {
     width: 300px;
     text-align: center;
 }
+
+
 
 textarea {
     width: 100%;
@@ -257,4 +264,73 @@ textarea {
 /* Align button to the left and description to the right */
 .settings-option {
     justify-content: flex-start;
+}
+
+.building {
+    display: flex;               /* Use flexbox for each building */
+    align-items: center;          /* Align image and content vertically */
+    margin-bottom: 20px;          /* Space between buildings */
+    width: 100%;                  /* Ensure the building container takes full width */
+}
+
+/* Styling for the building images */
+.building-img {
+    width: 130px;                 /* Increase image size */
+    height: 130px;                /* Keep height proportional */
+    margin-right: 15px;          /* Space between image and text */
+}
+
+.building-img:hover {
+    opacity: 0.9; /* Slight transparency on hover */
+}
+
+/* Styling for the building info and buttons */
+.building-info {
+    flex: 1;                     /* Allow the info to take up the remaining space */
+    display: flex;
+    flex-direction: column;       /* Stack name, description, and button */
+}
+
+/* Button styling */
+.buy-button {
+    padding: 10px 15px;
+    margin-top: 5px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.buy-button:hover {
+    background-color: #45a049;
+}
+
+/* Cost display */
+.cost {
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+/* Click upgrade container */
+.click-upgrade {
+    display: flex;               /* Use flexbox for alignment */
+    align-items: center;          /* Align image and content vertically */
+    margin-bottom: 20px;          /* Space between items */
+    width: 100%;                  /* Make the container take full width */
+}
+
+/* Reuse the same building image size for consistency */
+.click-upgrade .building-img {
+    width: 80px;                 /* Larger image size */
+    height: 80px;                /* Keep height proportional */
+    margin-right: 15px;          /* Space between image and text */
+}
+
+/* Click upgrade info (name, description, button) */
+.click-upgrade-info {
+    flex: 1;                     /* Let the info take the remaining space */
+    display: flex;
+    flex-direction: column;       /* Stack text and button */
 }
