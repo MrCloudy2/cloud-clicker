@@ -26,13 +26,13 @@ body {
 .middle-panel {
     width: 50%; /* Example width */
     background-position: center; /* Centered background */
-    animation: slideBackground 20s linear infinite; /* Slower movement */
+    animation: slideBackground 90s linear infinite; /* Slower movement */
 }
 
 .right-panel {
     width: 50%; /* Example width */
     background-position: left; /* Centered background */
-    animation: slideBackgroundFaster 30s linear infinite; /* Slightly faster movement */
+    animation: slideBackgroundFaster 130s linear infinite; /* Slightly faster movement */
 }
 
 /* Keyframes for middle panel */
