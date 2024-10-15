@@ -275,8 +275,8 @@ textarea {
 
 /* Styling for the building images */
 .building-img {
-    width: 130px;                 /* Increase image size */
-    height: 130px;                /* Keep height proportional */
+    width: 170px;                 /* Increase image size */
+    height: 170px;                /* Keep height proportional */
     margin-right: 15px;          /* Space between image and text */
 }
 
