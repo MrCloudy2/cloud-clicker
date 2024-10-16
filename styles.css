@@ -18,15 +18,10 @@ body {
 .middle-panel, .right-panel {
     background-size: cover;
     background-repeat: no-repeat;
+        align-items: center; 
 }
 
-/* Panel width settings */
-.middle-panel {
-    background-image: url("game assets/pictures/backgroundR.png");
-    width: 50%; /* Example width */
-    background-position: center; /* Centered background */
-    animation: slideBackground 70s linear infinite; /* Slower movement */
-}
+
 
 .right-panel {
     background-image: url("game assets/pictures/shop_background.png");
@@ -35,28 +30,28 @@ body {
     width: 100%; /* Make sure the panel takes up the full width */
     height: 100%; /* Make sure the panel takes up the full height */
     max-width: 400px;
+    align-items: center;
 }
 
+/* Panel width settings */
+.middle-panel {
+    background-image: url("game assets/pictures/backgroundR.png");
+    width: 50%; /* Example width */
+    background-repeat: repeat-x; /* Repeat the background horizontally */
+    background-size: 200% 100%; /* Double the width for smooth looping */
+    animation: slideBackground 100s linear infinite; /* Continuous animation */
+}
 
-/* Keyframes for middle panel */
 @keyframes slideBackground {
     0% {
-        background-position: center right; /* Start from the right */
+        background-position: 0 0; /* Start from the left */
     }
     100% {
-        background-position: center left; /* Move to the left */
+        background-position: -200% 0; /* Move two full image widths to the left */
     }
 }
 
-/* Keyframes for right panel with adjusted speed */
-@keyframes slideBackgroundFaster {
-    0% {
-        background-position: center right; /* Start from the right */
-    }
-    100% {
-        background-position: center left; /* Move to the left */
-    }
-}
+
 
 
 
@@ -359,7 +354,6 @@ textarea {
 
 /* Click upgrade container */
 .click-upgrade {
-    display: flex;               /* Use flexbox for alignment */
     align-items: center;          /* Align image and content vertically */
     margin-bottom: 20px;          /* Space between items */
     width: 100%;                  /* Make the container take full width */
