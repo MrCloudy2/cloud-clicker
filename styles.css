@@ -88,7 +88,7 @@ body {
 }
 
 .cloud img {
-    width: 350px; /* Sets the width of the cloud image */
+    width: 400px; /* Sets the width of the cloud image */
     cursor: pointer; /* Changes the cursor to a pointer when hovering over the cloud image */
     transition: transform 0.2s; /* Smooth transition for the scaling effect */
 }
