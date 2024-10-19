@@ -10,16 +10,51 @@ let gameState = JSON.parse(localStorage.getItem('gameState')) || {
     atmosphereManipulators: 0,
     climateControllers: 0,
     currentAmountPerClick: 1,
-    globalMulti: 1,
-    cursorMulti: 1,
-    evaporatorMulti: 1,
-    factoryMulti: 1,
-    cloudGeneratorMulti: 1,
-    weatherMachineMulti: 1,
-    stormStationMulti: 1,
-    atmosphereManipulatorMulti: 1,
-    climateControllerMulti: 1
+    cursorUpgrade: 0,
+    evaporatorUpgrade: 0,
+    factoryUpgrade: 0,
+    cloudGeneratorUpgrade: 0,
+    weatherMachineUpgrade: 0,
+    stormStationUpgrade: 0,
+    atmosphereManipulatorUpgrade: 0,
+    climateControllerUpgrade: 0
 };
+
+
+let globalMulti =  1
+let cursorMulti = 1
+let evaporatorMulti = 1
+let factoryMulti = 1
+let cloudGeneratorMulti = 1
+let weatherMachineMulti = 1
+let stormStationMulti = 1
+let atmosphereManipulatorMulti = 1
+let climateControllerMulti = 1
+
+const upgradeTiers = {
+    cursors: [5, 25, 50, 100, 150, 200, 300, 400, 500, 600, 700],
+    evaporators: [5, 25, 50, 100, 150, 200, 300, 400, 500, 600, 700],
+    factories: [5, 25, 50, 100, 150, 200, 300, 400, 500, 600, 700],
+    cloudGenerators: [5, 25, 50, 100, 150, 200, 300, 400, 500, 600, 700],
+    weatherMachines: [5, 25, 50, 100, 150, 200, 300, 400, 500, 600, 700],
+    stormStations: [5, 25, 50, 100, 150, 200, 300, 400, 500, 600, 700],
+    atmosphereManipulators: [5, 25, 50, 100, 150, 200, 300, 400, 500, 600, 700],
+    climateControllers: [5, 25, 50, 100, 150, 200, 300, 400, 500, 600, 700]
+};
+
+
+const multiplierPerTier = {
+    cursors: [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048],
+    evaporators: [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048],
+    factories: [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048],
+    cloudGenerators: [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048],
+    weatherMachines: [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048],
+    stormStations: [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048],
+    atmosphereManipulators: [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048],
+    climateControllers: [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048]
+};
+
+
 // cps values
 const defaultCursorCps = 0.1;
 const defaultEvaporatorCps = 1;
@@ -188,14 +223,14 @@ function checkAndCorrectValues() {
 
 // Update CPS function
 function updateCPS() {
-    cursorCps = gameState.cursors * defaultCursorCps;
-    evaporatorCps = gameState.evaporators * defaultEvaporatorCps;
-    factoryCps = gameState.factories * defaultFactoryCps;
-    cloudGeneratorCps = gameState.cloudGenerators * defaultCloudGeneratorCps;
-    weatherMachineCps = gameState.weatherMachines * defaultWeatherMachineCps;
-    stormStationCps = gameState.stormStations * defaultStormStationCps;
-    atmosphereManipulatorCps = gameState.atmosphereManipulators * defaultAtmosphereManipulatorCps;
-    climateControllerCps = gameState.climateControllers * defaultClimateControllerCps;
+    cursorCps = gameState.cursors * defaultCursorCps * globalMulti * multiplierPerTier.cursors[gameState.cursorUpgrade];
+    evaporatorCps = gameState.evaporators * defaultEvaporatorCps * globalMulti * multiplierPerTier.evaporators[gameState.evaporatorUpgrade];
+    factoryCps = gameState.factories * defaultFactoryCps * globalMulti * multiplierPerTier.factories[gameState.factoryUpgrade];
+    cloudGeneratorCps = gameState.cloudGenerators * defaultCloudGeneratorCps * globalMulti * multiplierPerTier.cloudGenerators[gameState.cloudGeneratorUpgrade];
+    weatherMachineCps = gameState.weatherMachines * defaultWeatherMachineCps * globalMulti * multiplierPerTier.weatherMachines[gameState.weatherMachineUpgrade]
+    stormStationCps = gameState.stormStations * defaultStormStationCps * globalMulti * multiplierPerTier.stormStations[gameState.stormStationUpgrade];
+    atmosphereManipulatorCps = gameState.atmosphereManipulators * defaultAtmosphereManipulatorCps * globalMulti * multiplierPerTier.atmosphereManipulators[gameState.atmosphereManipulatorUpgrade];
+    climateControllerCps = gameState.climateControllers * defaultClimateControllerCps* globalMulti * multiplierPerTier.climateControllers[gameState.climateControllerUpgrade];
 
     totalCPS = (Math.round( (cursorCps + evaporatorCps + factoryCps + cloudGeneratorCps + weatherMachineCps + stormStationCps + atmosphereManipulatorCps + climateControllerCps)*10)/10);
     
@@ -346,15 +381,16 @@ function removeTrailingZeros(numberString) {
 function updateGameState() {
     // Update current cloud count based on active time
     updateCPS();
-    gameState.cloudCount += gameState.globalMulti * gameState.cursorMulti * (cursorCps / 10);
-    gameState.cloudCount += gameState.globalMulti * gameState.evaporatorMulti * (evaporatorCps / 10);
-    gameState.cloudCount += gameState.globalMulti * gameState.factoryMulti * (factoryCps / 10);
-    gameState.cloudCount += gameState.globalMulti * gameState.cloudGeneratorMulti * (cloudGeneratorCps / 10);
-    gameState.cloudCount += gameState.globalMulti * gameState.weatherMachineMulti * (weatherMachineCps / 10);
-    gameState.cloudCount += gameState.globalMulti * gameState.stormStationMulti * (stormStationCps / 10);
-    gameState.cloudCount += gameState.globalMulti * gameState.atmosphereManipulatorMulti * (atmosphereManipulatorCps / 10);
-    gameState.cloudCount += gameState.globalMulti * gameState.climateControllerMulti * (climateControllerCps / 10); 
+    gameState.cloudCount += globalMulti * multiplierPerTier.cursors[gameState.cursorUpgrade] * (cursorCps / 10);
+    gameState.cloudCount += globalMulti * multiplierPerTier.evaporators[gameState.evaporatorUpgrade] * (evaporatorCps / 10);
+    gameState.cloudCount += globalMulti * multiplierPerTier.factories[gameState.factoryUpgrade] * (factoryCps / 10);
+    gameState.cloudCount += globalMulti * multiplierPerTier.cloudGenerators[gameState.cloudGeneratorUpgrade] * (cloudGeneratorCps / 10);
+    gameState.cloudCount += globalMulti * multiplierPerTier.weatherMachines[gameState.weatherMachineUpgrade] * (weatherMachineCps / 10);
+    gameState.cloudCount += globalMulti * multiplierPerTier.stormStations[gameState.stormStationUpgrade] * (stormStationCps / 10);
+    gameState.cloudCount += globalMulti * multiplierPerTier.atmosphereManipulators[gameState.atmosphereManipulatorUpgrade] * (atmosphereManipulatorCps / 10);
+    gameState.cloudCount += globalMulti * multiplierPerTier.climateControllers[gameState.climateControllerUpgrade] * (climateControllerCps / 10); 
      // Update CPS display
+     console.log('+')
 }
 // Update cloud count displayed on UI
 function updateCloudCountDisplay() {
@@ -398,6 +434,7 @@ function buyCursor() {
         cursorCost = Math.round(cursorCost * 1.15);
         document.getElementById('cursorCost').innerText = formatLargeNumber(cursorCost); // Update cursor cost
         updateCPS(); // Update CPS display
+        updateBuildingList();
         playSound('purchaseSound');
     }
 }
@@ -410,6 +447,7 @@ function buyEvaporator() {
         evaporatorCost = Math.round(evaporatorCost * 1.15);
         document.getElementById('evaporatorCost').innerText = formatLargeNumber(evaporatorCost); // Update cursor cost
         updateCPS(); // Update CPS display
+        updateBuildingList();
         playSound('purchaseSound');
     }
 }
@@ -422,6 +460,7 @@ function buyFactory() {
         factoryCost = Math.round(factoryCost * 1.15);
         document.getElementById('factoryCost').innerText = formatLargeNumber(factoryCost); // Update factory cost
         updateCPS(); // Update CPS display
+        updateBuildingList();
         playSound('purchaseSound');
     }
 }
@@ -434,6 +473,7 @@ function buyCloudGenerator() {
         cloudGeneratorCost = Math.round(cloudGeneratorCost * 1.15);
         document.getElementById('cloudGeneratorCost').innerText = formatLargeNumber(cloudGeneratorCost); // Update cloud generator cost
         updateCPS(); // Update CPS display
+        updateBuildingList();
         playSound('purchaseSound');
     }
 }
@@ -446,6 +486,7 @@ function buyWeatherMachine() {
         weatherMachineCost = Math.round(weatherMachineCost * 1.15);
         document.getElementById('weatherMachineCost').innerText = formatLargeNumber(weatherMachineCost); // Update weather machine cost
         updateCPS(); // Update CPS display
+        updateBuildingList();
         playSound('purchaseSound');
     }
 }
@@ -458,6 +499,7 @@ function buyStormStation() {
         stormStationCost = Math.round(stormStationCost * 1.15);
         document.getElementById('stormStationCost').innerText = formatLargeNumber(stormStationCost); // Update storm station cost
         updateCPS(); // Update CPS display
+        updateBuildingList();
         playSound('purchaseSound');
     }
 }
@@ -470,6 +512,7 @@ function buyAtmosphereManipulator() {
         atmosphereManipulatorCost = Math.round(atmosphereManipulatorCost * 1.15);
         document.getElementById('atmosphereManipulatorCost').innerText = formatLargeNumber(atmosphereManipulatorCost); // Update atmosphere manipulator cost
         updateCPS(); // Update CPS display
+        updateBuildingList();
         playSound('purchaseSound');
     }
 }
@@ -482,9 +525,166 @@ function buyClimateController() {
         climateControllerCost = Math.round(climateControllerCost * 1.15);
         document.getElementById('climateControllerCost').innerText = formatLargeNumber(climateControllerCost); // Update climate controller cost
         updateCPS(); // Update CPS display
+        updateBuildingList();
         playSound('purchaseSound');
     }
 }
+
+
+function updateBuildingList() {
+    const buildingList = document.getElementById('buildingList');
+    buildingList.innerHTML = ''; // Clear existing content
+
+    // Map building names to their corresponding keys in multiplierPerTier
+    const multiplierKeys = {
+        'Cursor': 'cursors',
+        'Evaporator': 'evaporators',
+        'Factory': 'factories',
+        'Cloud Generator': 'cloudGenerators',
+        'Weather Machine': 'weatherMachines',
+        'Storm Station': 'stormStations',
+        'Atmosphere Manipulator': 'atmosphereManipulators',
+        'Climate Controller': 'climateControllers'
+    };
+
+    const buildings = [
+        { name: 'Cursor', cps: defaultCursorCps, count: gameState.cursors, cost: cursorCost, upgrade: gameState.cursorUpgrade, upgradeTiers: upgradeTiers.cursors },
+        { name: 'Evaporator', cps: defaultEvaporatorCps, count: gameState.evaporators, cost: evaporatorCost, upgrade: gameState.evaporatorUpgrade, upgradeTiers: upgradeTiers.evaporators },
+        { name: 'Factory', cps: defaultFactoryCps, count: gameState.factories, cost: factoryCost, upgrade: gameState.factoryUpgrade, upgradeTiers: upgradeTiers.factories },
+        { name: 'Cloud Generator', cps: defaultCloudGeneratorCps, count: gameState.cloudGenerators, cost: cloudGeneratorCost, upgrade: gameState.cloudGeneratorUpgrade, upgradeTiers: upgradeTiers.cloudGenerators },
+        { name: 'Weather Machine', cps: defaultWeatherMachineCps, count: gameState.weatherMachines, cost: weatherMachineCost, upgrade: gameState.weatherMachineUpgrade, upgradeTiers: upgradeTiers.weatherMachines },
+        { name: 'Storm Station', cps: defaultStormStationCps, count: gameState.stormStations, cost: stormStationCost, upgrade: gameState.stormStationUpgrade, upgradeTiers: upgradeTiers.stormStations },
+        { name: 'Atmosphere Manipulator', cps: defaultAtmosphereManipulatorCps, count: gameState.atmosphereManipulators, cost: atmosphereManipulatorCost, upgrade: gameState.atmosphereManipulatorUpgrade, upgradeTiers: upgradeTiers.atmosphereManipulators },
+        { name: 'Climate Controller', cps: defaultClimateControllerCps, count: gameState.climateControllers, cost: climateControllerCost, upgrade: gameState.climateControllerUpgrade, upgradeTiers: upgradeTiers.climateControllers },
+    ];
+
+    buildings.forEach((building, index) => {
+        if (building.count != 0) {
+            const key = multiplierKeys[building.name];
+            if (!key || !multiplierPerTier[key]) {
+                console.warn(`No multiplier found for ${building.name}`);
+                return; // Skip this building if there's no matching multiplier
+            }
+
+            const totalCps = building.cps * building.count * multiplierPerTier[key][building.upgrade];
+            const roi = (building.cost / (building.cps * multiplierPerTier[key][building.upgrade])).toFixed(2);
+            
+            // Calculate the upgrade cost
+            const upgradeCost = calculateUpgradeCost(building.cps, building.upgrade);
+
+            const buildingElement = document.createElement('div');
+            buildingElement.className = 'building-info-display';
+            buildingElement.innerHTML = `
+                <h4>${building.name}</h4>
+                <p>Owned: ${building.count}</p>
+                <p>CPS per ${building.name}: ${building.cps.toFixed(1)}</p>
+                <p>Combined CPS: ${totalCps.toFixed(1)}</p>
+                <p>ROI Cost: ${roi}</p>
+                <button class="upgrade-button ${building.count >= building.upgradeTiers[building.upgrade] ? (gameState.cloudCount >= upgradeCost ? 'enabled' : 'outline') : 'disabled'}" 
+                        onclick="upgradeBuilding(${index})" 
+                        ${building.count >= building.upgradeTiers[building.upgrade] ? '' : 'disabled'}>
+                    Upgrade
+                    <img src="game assets/pictures/cloudlogoBlack.png" alt="Cloud icon" style="width: 20px; height: auto;">
+                    <span>${formatLargeNumber(upgradeCost)}</span>  <!-- Display upgrade cost here -->
+                </button>
+            `;
+
+            buildingList.appendChild(buildingElement); // Append the building element to the list
+        }
+    });
+}
+
+
+
+function calculateUpgradeCost(buildingCps, upgradeLevel) {
+    var locationcost;
+    switch(buildingCps){
+        case 0.1:
+            cost = 10
+            break
+        case defaultEvaporatorCps:
+            cost = 100
+            break
+        case defaultFactoryCps:
+            cost = 1000
+            break
+         case defaultCloudGeneratorCps:
+            cost = 5000
+            break
+        case defaultWeatherMachineCps:
+            cost = 20000
+            break
+        case defaultStormStationCps:
+            cost = 100000
+            break
+        case defaultAtmosphereManipulatorCps:
+            cost = 500000
+            break
+        case 500:
+            cost = 2000000
+            break
+}
+console.log(cost)
+console.log(buildingCps)
+switch(upgradeLevel){
+    case 0:
+        return (cost * 4);
+    case 1:
+        return (cost *150);
+    case 2:
+        return (cost * 2000)
+    case 3:
+        return (cost * 2000000)
+    case 4:
+        return (cost * 2000000000)
+    case 5:
+        return (cost * 2000000000000)
+    case 6:
+        return (cost * 2.2 *  Math.pow(10, 15))
+    case 7:
+        return (cost * 2.2 * Math.pow(10, 24))
+    case 8:
+        return (cost * 2.2 * Math.pow(10, 32))
+    case 9:
+        return (cost * 2.2 * Math.pow(10, 42))
+    case 10:
+        return (cost * 4 * Math.pow(10, 48))
+    case 11:
+        return (cost * 2.2 * Math.pow(10, 45))
+}
+}
+
+
+function upgradeBuilding(index) {
+    const buildings = [
+        { name: 'Cursor', cps: defaultCursorCps, count: gameState.cursors, upgrade: 'cursorUpgrade', upgradeTiers: upgradeTiers.cursors },
+        { name: 'Evaporator', cps: defaultEvaporatorCps, count: gameState.evaporators, upgrade: 'evaporatorUpgrade', upgradeTiers: upgradeTiers.evaporators },
+        { name: 'Factory', cps: defaultFactoryCps, count: gameState.factories, upgrade: 'factoryUpgrade', upgradeTiers: upgradeTiers.factories },
+        { name: 'Cloud Generator', cps: defaultCloudGeneratorCps, count: gameState.cloudGenerators, upgrade: 'cloudGeneratorUpgrade', upgradeTiers: upgradeTiers.cloudGenerators },
+        { name: 'Weather Machine', cps: defaultWeatherMachineCps, count: gameState.weatherMachines, upgrade: 'weatherMachineUpgrade', upgradeTiers: upgradeTiers.weatherMachines },
+        { name: 'Storm Station', cps: defaultStormStationCps, count: gameState.stormStations, upgrade: 'stormStationUpgrade', upgradeTiers: upgradeTiers.stormStations },
+        { name: 'Atmosphere Manipulator', cps: defaultAtmosphereManipulatorCps, count: gameState.atmosphereManipulators, upgrade: 'atmosphereManipulatorUpgrade', upgradeTiers: upgradeTiers.atmosphereManipulators },
+        { name: 'Climate Controller', cps: defaultClimateControllerCps, count: gameState.climateControllers, upgrade: 'climateControllerUpgrade', upgradeTiers: upgradeTiers.climateControllers }
+    ];
+
+    const building = buildings[index];
+    const upgradeLevel = gameState[building.upgrade];
+    const upgradeCost = calculateUpgradeCost(building.cps, upgradeLevel);
+
+    // Check if the player has enough clouds and meets the upgrade tier requirement
+    if (building.count >= building.upgradeTiers[upgradeLevel] && gameState.cloudCount >= upgradeCost) {
+        gameState.cloudCount -= upgradeCost; // Deduct the upgrade cost
+        gameState[building.upgrade]++; // Increase the upgrade level
+        updateBuildingList(); // Refresh the building display
+        updateCPS(); // Recalculate CPS after the upgrade
+        updateCloudCountDisplay(); // Update the cloud count display
+        playSound('purchaseSound');
+    } else {
+        alert("Not enough clouds or buildings to upgrade.");
+    }
+}
+
+
 
 // Function to reset the saved game state
 function resetGame() {
@@ -638,6 +838,9 @@ document.addEventListener('DOMContentLoaded', function() {
         updateGameState(); // Update game state
         updateCloudCountDisplay(); // Update cloud count displayed on UI
     }, 100);
+    setInterval(function() {
+        updateBuildingList();
+    }, 1000);
     
     
 
