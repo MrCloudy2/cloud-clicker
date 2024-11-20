@@ -11,35 +11,40 @@ body {
 }
 
 
-.left-panel, .right-panel, .middle-panel {
-    padding: 20px; /* Adds padding inside the panels */
-}
-
-.middle-panel, .right-panel {
-    background-size: cover;
-    background-repeat: no-repeat;
-        align-items: center; 
-}
-
-
-
 .right-panel {
+    flex: 0.6;
+    display: flex; /* Enables flexbox layout on the right panel */
+    flex-direction: column; /* Arranges children elements in a column */
+    align-items: flex-start; /* Aligns children elements to the end of the cross axis (right) */
+    padding: 20px; /* Adds padding inside the right panel */
+    height: 100vh; /* Sets maximum height of the right panel */
+    overflow-y: auto; /* Adds vertical scrollbar if content overflows */
+    overflow-y: auto; /* Adds vertical scrollbar if content overflows */
     background-image: url("game assets/pictures/shop_background.png");
     background-position: center; /* Optional: Center the image */
     background-size: 100% 100%; /* Stretch to fill both dimensions */
     width: 100%; /* Make sure the panel takes up the full width */
     height: 100%; /* Make sure the panel takes up the full height */
     max-width: 400px;
+    min-width: 350px;
     align-items: center;
 }
 
 /* Panel width settings */
 .middle-panel {
+    text-align: center; /* Centers the text inside the left panel */
+    display: flex; /* Enables flexbox layout on the left panel */
+    flex-direction: column; /* Arranges children elements in a column */
+    align-items: center; /* Centers children elements horizontally */
+    height: 100vh;
+    flex: 1; /* Smaller flex value reduces the width of the middle panel */
     background-image: url("game assets/pictures/backgroundR.png");
-    width: 50%; /* Example width */
+    width: 100%; 
     background-repeat: repeat-x; /* Repeat the background horizontally */
-    background-size: 200% 100%; /* Double the width for smooth looping */
+    background-size: cover; /* Double the width for smooth looping */
     animation: slideBackground 100s linear infinite; /* Continuous animation */
+    overflow-y: auto; /* Adds vertical scrollbar when content overflows */
+    overflow-x: hidden; /* Prevents horizontal scrolling if content overflows */
 }
 
 @keyframes slideBackground {
@@ -52,21 +57,15 @@ body {
 }
 
 
-
-
-
-.left-panel, .right-panel {
-    flex: 0.8; /* Larger flex values for the left and right panels */
-}
-
 .left-panel {
     text-align: center; /* Centers the text inside the left panel */
     display: flex; /* Enables flexbox layout on the left panel */
     flex-direction: column; /* Arranges children elements in a column */
     align-items: center; /* Centers children elements horizontally */
     height: 100vh;
-    max-width: 500px;
-    min-width: 300px;
+    width: 50%;
+    max-width: 480px;
+    min-width: 280px;
     background-image: url('game assets/pictures/background.png');
     background-size: cover; /* Adjust this value to fit your needs */
     background-repeat: no-repeat; /* Prevent the background from repeating */
@@ -131,52 +130,10 @@ button.upgrade-button .info p {
     margin: 5px 0; /* Added margin to separate each piece of information */
 }
 
-
-.middle-panel{
-    text-align: center; /* Centers the text inside the left panel */
-    display: flex; /* Enables flexbox layout on the left panel */
-    flex-direction: column; /* Arranges children elements in a column */
-    align-items: center; /* Centers children elements horizontally */
-    height: 100vh;
-    flex: 1; /* Smaller flex value reduces the width of the middle panel */
-}
-
-.right-panel {
-    flex: 0.6;
-    display: flex; /* Enables flexbox layout on the right panel */
-    flex-direction: column; /* Arranges children elements in a column */
-    align-items: flex-start; /* Aligns children elements to the end of the cross axis (right) */
-    padding: 20px; /* Adds padding inside the right panel */
-    height: 100vh; /* Sets maximum height of the right panel */
-    overflow-y: auto; /* Adds vertical scrollbar if content overflows */
-    overflow-y: auto; /* Adds vertical scrollbar if content overflows */
-}
 .divider1, .divider2{
     height: 100vh;
     width: 15px;
     flex-shrink: 0;
-}
-
-.tooltip {
-    display: none; /* Hidden by default */
-    position: absolute; /* Position it absolutely */
-    right: 0;
-    background-color: #fff; /* Background color */
-    color: #000; /* Text color */
-    padding: 4px; /* Padding */
-    border: 1px solid #000; /* Border */
-    border-radius: 5px; /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for better visibility */
-    z-index: 1000; /* Ensure it appears above other elements */
-    width: max-content; /* Adjust the width to fit content */
-    white-space: nowrap; /* Prevent text wrapping */
-    line-height: 1 !important; /* Force line-height to apply */
-}
-
-.tooltip p, .tooltip span {
-    line-height: 1; /* Apply to child elements */
-    margin: 0; /* Remove any default margins */
-    padding: 0; /* Remove any extra padding */
 }
 
 #saveModal {
@@ -198,8 +155,6 @@ button.upgrade-button .info p {
     width: 300px;
     text-align: center;
 }
-
-
 
 textarea {
     width: 100%;

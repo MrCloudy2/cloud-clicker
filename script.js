@@ -96,7 +96,7 @@ function autoSave() {
 // Start auto-save when the page is loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Call autoSave every 60 seconds (60000 ms)
-    setInterval(autoSave, 60000);
+    setInterval(autoSave, 30000);
 });
 
 // Function to save game state to local storage
@@ -260,6 +260,10 @@ function toggleMute() {
 }
 
 function formatLargeNumber(num) {
+    if (num == Number.POSITIVE_INFINITY || num == Number.NEGATIVE_INFINITY)
+        {
+            return num.toLocaleString('en-US');
+        }
     const thresholds = [
         { value: 1e303, suffix: ' Centillion' },
         { value: 1e300, suffix: ' Novemnonagintillion' },
@@ -391,7 +395,6 @@ function updateGameState() {
     gameState.cloudCount += globalMulti * multiplierPerTier.atmosphereManipulators[gameState.atmosphereManipulatorUpgrade] * (atmosphereManipulatorCps / 10);
     gameState.cloudCount += globalMulti * multiplierPerTier.climateControllers[gameState.climateControllerUpgrade] * (climateControllerCps / 10); 
      // Update CPS display
-     console.log('+')
 }
 // Update cloud count displayed on UI
 function updateCloudCountDisplay() {
@@ -408,7 +411,6 @@ function buyClickUpgrade(){
     document.getElementById('clickUpgradeCost').innerText = formatLargeNumber(clickUpgradeCost )
     playSound('purchaseSound');
     }
-
 }
 
 //salculate Clicker upgrade cost
@@ -426,6 +428,54 @@ function clickCloud() {
     clickCooldown = true;
     setTimeout(() => clickCooldown = false, 5); // 5ms throttle
 }
+
+function buyBuilding(buildingName) {
+    const buildingData = {
+        cursor: { baseCost: 10, countProp: 'cursors', costProp: 'cursorCost', displayId: 'cursorCost' },
+        evaporators: { baseCost: 100, countProp: 'evaporators', costProp: 'evaporatorCost', displayId: 'evaporatorCost' },
+        factories: { baseCost: 1000, countProp: 'factories', costProp: 'factoryCost', displayId: 'factoryCost' },
+        cloudGenerators: { baseCost: 5000, countProp: 'cloudGenerators', costProp: 'cloudGeneratorCost', displayId: 'cloudGeneratorCost' },
+        weatherMachines: { baseCost: 20000, countProp: 'weatherMachines', costProp: 'weatherMachineCost', displayId: 'weatherMachineCost' },
+        stormStations: { baseCost: 100000, countProp: 'stormStations', costProp: 'stormStationCost', displayId: 'stormStationCost' },
+        atmosphereManipulators: { baseCost: 500000, countProp: 'atmosphereManipulators', costProp: 'atmosphereManipulatorCost', displayId: 'atmosphereManipulatorCost' },
+        climateControllers: { baseCost: 2000000, countProp: 'climateControllers', costProp: 'climateControllerCost', displayId: 'climateControllerCost' }
+    };
+
+    const building = buildingData[buildingName];
+
+    if (!building) {
+        console.warn(`Invalid building name: ${buildingName}`);
+        return;
+    }
+
+    // Dynamically get the current cost
+    const currentCost = window[building.costProp];
+
+    // Check if player has enough clouds
+    if (gameState.cloudCount >= currentCost) {
+        // Deduct cost and increment building count
+        gameState.cloudCount -= currentCost;
+        gameState[building.countProp]++;
+
+        // Calculate and update the cost for the next purchase
+        const newCost = Math.round(currentCost * 1.15);
+        window[building.costProp] = newCost;
+
+        // Update the UI to reflect the new cost
+        document.getElementById(building.displayId).innerText = formatLargeNumber(newCost);
+
+        // Update other aspects of the game state
+        updateCPS();
+        updateBuildingList();
+        playSound('purchaseSound');
+    } else {
+        console.log(`Not enough clouds to buy ${buildingName}.`);
+    }
+}
+
+
+
+
 
 // Buy cursor function
 function buyCursor() {
@@ -578,9 +628,9 @@ function updateBuildingList() {
             buildingElement.innerHTML = `
                 <h4>${building.name}</h4>
                 <p>Owned: ${building.count}</p>
-                <p>CPS per ${building.name}: ${building.cps.toFixed(1)}</p>
-                <p>Combined CPS: ${totalCps.toFixed(1)}</p>
-                <p>ROI Cost: ${roi}</p>
+                <p>CPS / ${building.name}: ${formatLargeNumber(building.cps * multiplierPerTier[key][building.upgrade])}</p>
+                <p>Combined CPS: ${formatLargeNumber(totalCps)}</p>
+                <p>ROI Cost: ${formatLargeNumber(roi)}</p>
                 <button class="upgrade-button ${building.count >= building.upgradeTiers[building.upgrade] ? (gameState.cloudCount >= upgradeCost ? 'enabled' : 'outline') : 'disabled'}" 
                         onclick="upgradeBuilding(${index})" 
                         ${building.count >= building.upgradeTiers[building.upgrade] ? '' : 'disabled'}>
@@ -625,8 +675,6 @@ function calculateUpgradeCost(buildingCps, upgradeLevel) {
             cost = 2000000
             break
 }
-console.log(cost)
-console.log(buildingCps)
 switch(upgradeLevel){
     case 0:
         return (cost * 4);
@@ -685,42 +733,10 @@ function upgradeBuilding(index) {
     }
 }
 
-
-
 // Function to reset the saved game state
 function resetGame() {
     localStorage.removeItem('gameState'); // Remove the saved game state from local storage
     location.reload(); // Reload the page to reset the game
-}
-
-function numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-
-function resetUpgrades() {
-    // Set all upgrade counts to 0
-    gameState.cursors = 0;
-    gameState.evaporators = 0;
-    gameState.factories = 0;
-    gameState.cloudGenerators = 0;
-    gameState.weatherMachines = 0;
-    gameState.stormStations = 0;
-    gameState.atmosphereManipulators = 0;
-    gameState.climateControllers = 0;
-    gameState.currentAmountPerClick = 1;
-
-cursorCost = calculateCost(gameState.cursors, 10); // Updated cursor cost
-evaporatorCost = calculateCost(gameState.evaporators, 100); // New evaporator cost
-factoryCost = calculateCost(gameState.factories, 1000);
-cloudGeneratorCost = calculateCost(gameState.cloudGenerators, 5000);
-weatherMachineCost = calculateCost(gameState.weatherMachines, 20000);
-stormStationCost = calculateCost(gameState.stormStations, 100000);
-atmosphereManipulatorCost = calculateCost(gameState.atmosphereManipulators, 500000);
-climateControllerCost = calculateCost(gameState.climateControllers, 2000000);
-clickUpgradeCost = calculateCUCost(gameState.currentAmountPerClick, 10);
-
-    updateCPS();
-    updateCloudCountDisplay();
 }
 
 function openTab(event, tabId) {
@@ -748,8 +764,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-//                                                                                       //
-//                  MAIN DOING THINGS SHIT                     //
+//                                                                                        //
+//                  MAIN DOING THINGS SHIT                      //
 //                                                                                       //
 
 // Load initial game state
@@ -767,77 +783,11 @@ document.addEventListener('DOMContentLoaded', function() {
     updateCPS(); // Update CPS display
 });
 
-function generateTooltipContent(buildingType) {
-    let buildingCPS = 0;
-    let buildingCount = 0;
-
-    switch (buildingType) {
-        case 'cursors':
-            buildingCPS = defaultCursorCps;
-            buildingCount = gameState.cursors;
-            break;
-        case 'evaporators':
-            buildingCPS = defaultEvaporatorCps;
-            buildingCount = gameState.evaporators;
-            break;
-        case 'factories':
-            buildingCPS = defaultFactoryCps; 
-            buildingCount = gameState.factories;
-            break;
-        case 'cloudGenerators':
-            buildingCPS = defaultCloudGeneratorCps; 
-            buildingCount = gameState.cloudGenerators;
-            break;
-        case 'weatherMachines':
-            buildingCPS = defaultWeatherMachineCps; 
-            buildingCount = gameState.weatherMachines;
-            break;
-        case 'stormStations':
-            buildingCPS = defaultStormStationCps; 
-            buildingCount = gameState.stormStations;
-            break;
-        case 'atmosphereManipulators':
-            buildingCPS = defaultAtmosphereManipulatorCps; 
-            buildingCount = gameState.atmosphereManipulators;
-            break;
-        case 'climateControllers':
-            buildingCPS = defaultClimateControllerCps; 
-            buildingCount = gameState.climateControllers;
-            break;
-            case 'click':
-                return `
-                <span class="info">
-                    <p>Amount: <span id="buildingCount">${gameState.currentAmountPerClick}</span></p>
-                </span>
-            `;
-        default:
-            break;
-    }
-
-    return `
-        <span class="info">
-            <p>Amount: <span id="buildingCount">${buildingCount}</span></p>
-            <p>CPS: ${buildingCPS}</p>
-            <p>Total CPS: <span id="BuildingCPS">${buildingCount * buildingCPS}</span></p>
-        </span>
-    `;
-}
-
-
-
-
 document.addEventListener('DOMContentLoaded', function() {
     if(gameState.version != 1){
         localStorage.removeItem('gameState'); // Remove the saved game state
         location.reload(); // Reload the page to reset the game
     }
-
-
-    const tooltip = document.getElementById('tooltip');
-    const upgradeButtons = document.querySelectorAll('.upgrade-button');
-    const middlePanel = document.querySelector('.middle-panel');
-
-    // Default CPS value
 
 
 
@@ -848,109 +798,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setInterval(function() {
         updateBuildingList();
     }, 1000);
-    
-    
 
-
-    // Function to generate tooltip content
-    function generateTooltipContent(buildingType) {
-        let buildingCPS = 0;
-        let buildingCount = 0;
-        let buildingCost;
-
-        switch (buildingType) {
-            case 'cursors':
-                buildingCPS = defaultCursorCps;
-                buildingCount = gameState.cursors;
-                buildingCost = cursorCost;
-                break;
-            case 'evaporators':
-                buildingCPS = defaultEvaporatorCps;
-                buildingCount = gameState.evaporators;
-                buildingCost = evaporatorCost;
-                break;
-            case 'factories':
-                buildingCPS = defaultFactoryCps; 
-                buildingCount = gameState.factories;
-                buildingCost = factoryCost;
-                break;
-            case 'cloudGenerators':
-                buildingCPS = defaultCloudGeneratorCps; 
-                buildingCount = gameState.cloudGenerators;
-                buildingCost = cloudGeneratorCost;
-                break;
-            case 'weatherMachines':
-                buildingCPS = defaultWeatherMachineCps; 
-                buildingCount = gameState.weatherMachines;
-                buildingCost = weatherMachineCost;
-                break;
-            case 'stormStations':
-                buildingCPS = defaultStormStationCps; 
-                buildingCount = gameState.stormStations;
-                buildingCost = stormStationCost;
-                break;
-            case 'atmosphereManipulators':
-                buildingCPS = defaultAtmosphereManipulatorCps; 
-                buildingCount = gameState.atmosphereManipulators;
-                buildingCost = atmosphereManipulatorCost;
-                break;
-            case 'climateControllers':
-                buildingCPS = defaultClimateControllerCps; 
-                buildingCount = gameState.climateControllers;
-                buildingCost = climateControllerCost;
-                break;
-        case 'click':
-            return `
-            <span class="info">
-                <p>Amount: <span id="buildingCount">${gameState.currentAmountPerClick}</span></p>
-            </span>
-        `;
-            default:
-                break;
-        }
-
-        return `
-            <span class="info">
-                <p>Amount: <span id="buildingCount">${buildingCount}</span></p>
-                <p>CPS: ${buildingCPS}</p>
-                <p>Total CPS: <span id="BuildingCPS">${(buildingCount * buildingCPS).toFixed(1)}</span></p>
-                <p>ROI cost:   <span id="BuildingCPS">${(buildingCost / buildingCPS)}</span></p>
-                
-            </span>
-        `;
-    }
-
-
-    upgradeButtons.forEach(button => {
-        const buildingType = button.getAttribute('data-building-type');
-
-        button.addEventListener('mouseover', function(event) {
-            tooltip.innerHTML = generateTooltipContent(buildingType);
-            tooltip.style.display = 'block';
-
-            const middlePanelRect = middlePanel.getBoundingClientRect();
-            const buttonRect = event.target.getBoundingClientRect();
-
-            tooltip.style.left = `${middlePanelRect.right - tooltip.offsetWidth}px`;
-            tooltip.style.top = `${event.clientY + window.scrollY -30}px`;
-        });
-
-        button.addEventListener('mousemove', function(event) {
-            tooltip.style.top = `${event.clientY + window.scrollY - 30}px`;
-        });
-
-        button.addEventListener('mouseout', function() {
-            tooltip.style.display = 'none';
-
-        });
-        button.addEventListener('click', function(event) {
-            tooltip.innerHTML = generateTooltipContent(buildingType);
-            tooltip.style.display = 'block';
-
-        });
-    });
 });
-
-
 
 checkAndCorrectValues();
