@@ -45,7 +45,7 @@ body {
     animation: slideBackground 100s linear infinite; /* Continuous animation */
     overflow-y: auto; /* Adds vertical scrollbar when content overflows */
     overflow-x: hidden; /* Prevents horizontal scrolling if content overflows */
-    padding-bottom: 30px;
+    padding-bottom: 60px;
 }
 
 @keyframes slideBackground {
